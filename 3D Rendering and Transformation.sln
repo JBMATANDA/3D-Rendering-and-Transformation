@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3D Rendering and Transformation", "3D Rendering and Transformation\3D Rendering and Transformation.csproj", "{4E2A0F07-B568-4F5E-A8EC-98A72AC2F214}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "3D Rendering and Transformation\GameEngine.csproj", "{4E2A0F07-B568-4F5E-A8EC-98A72AC2F214}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{6068C912-0623-4589-8EC9-EC6833969922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4E2A0F07-B568-4F5E-A8EC-98A72AC2F214}.Debug|x86.Build.0 = Debug|x86
 		{4E2A0F07-B568-4F5E-A8EC-98A72AC2F214}.Release|x86.ActiveCfg = Release|x86
 		{4E2A0F07-B568-4F5E-A8EC-98A72AC2F214}.Release|x86.Build.0 = Release|x86
+		{6068C912-0623-4589-8EC9-EC6833969922}.Debug|x86.ActiveCfg = Debug|x86
+		{6068C912-0623-4589-8EC9-EC6833969922}.Debug|x86.Build.0 = Debug|x86
+		{6068C912-0623-4589-8EC9-EC6833969922}.Release|x86.ActiveCfg = Release|x86
+		{6068C912-0623-4589-8EC9-EC6833969922}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
