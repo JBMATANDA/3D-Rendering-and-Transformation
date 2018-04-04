@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _3D_Rendering_and_Transformation.Systems
 {
-    class TransformSystem
+    public class MoveSystem
     {
     }
 }

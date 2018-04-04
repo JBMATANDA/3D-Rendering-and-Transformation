@@ -24,7 +24,10 @@ namespace _3D_Rendering_and_Transformation.Managers
             return cm;
         }
 
-
+        public uint NewEntity()
+        {
+            return nextid++;
+        }
         public T EntityComponent<T>(uint id)
         {
             if (!Components.ContainsKey(typeof(T)))
@@ -65,5 +68,9 @@ namespace _3D_Rendering_and_Transformation.Managers
             components.Add(id, component);
         }
 
+        public void ClearComponents()
+        {
+            Components.Clear();
+        }
     }
 }
