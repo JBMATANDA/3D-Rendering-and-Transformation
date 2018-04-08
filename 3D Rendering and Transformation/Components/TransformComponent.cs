@@ -9,10 +9,11 @@ namespace _3D_Rendering_and_Transformation.Components
 {
     public class TransformComponent : IComponent
     {
-        public Matrix scaling { get; set; }
-        public Matrix rotation { get; set; }
-        public Matrix position { get; set; }
+        public Vector3 Scale { get; set; }
+        public Matrix Rotation { get; set; }
+        public Vector3 Position { get; set; }
         public  float MAXROTATION { get ;set; }
-         public float speed { get; set; }
+        public float Speed { get; set; }
+   
     }
 }

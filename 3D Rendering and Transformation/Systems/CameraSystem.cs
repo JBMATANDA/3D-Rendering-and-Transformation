@@ -20,14 +20,20 @@ namespace _3D_Rendering_and_Transformation.Systems
             foreach (var cameraComponent in cameraComponents)
             {
                 var camera = cameraComponent.Value as CameraComponent;
+                var _model = ComponentManager.Get().EntityComponent<ModelComponent>(cameraComponent.Key);
 
-                camera.camPosition = new Vector3(0f, 0f, 0f);
-                camera.camTarget = new Vector3(0f, 0f, -100f);
-            
-                camera.worldMatrix = Matrix.CreateWorld(camera.camTarget, Vector3.Forward, Vector3.Up);
-                camera.viewMatrix = Matrix.CreateLookAt(camera.camPosition, camera.camTarget, Vector3.Up);
-                camera.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(camera.degree),graphicsDevice.DisplayMode.AspectRatio,camera.near,camera.far);
+                camera.CamPosition = new Vector3(0, 0, 20);
+                camera.CamTarget = new Vector3(0, 0, 0);
+
+                camera.AspectRatio = graphicsDevice.Viewport.AspectRatio;
+                camera.Far = 1000f;
+                camera.Near = 0.1f;
+
+                camera.World = Matrix.Identity;
+                camera.View = Matrix.CreateLookAt(camera.CamPosition, camera.CamTarget, Vector3.Up);
+                camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, camera.AspectRatio,camera.Near,camera.Far);       
             }
         }
+        
     }
 }

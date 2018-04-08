@@ -15,12 +15,16 @@ namespace Chopper_Game
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private CameraSystem cameraSystem;
+        private RenderModelSystem renderModelSystem;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+      
             Content.RootDirectory = "Content";
             cameraSystem = new CameraSystem();
+            renderModelSystem = new RenderModelSystem();
+            
         }
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace Chopper_Game
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+     
             // TODO: use this.Content to load your game content here
         }
 
@@ -82,19 +86,23 @@ namespace Chopper_Game
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            renderModelSystem.Draw(gameTime);
             base.Draw(gameTime);
         }
         private void ResetGame()
         {
             ComponentManager.Get().ClearComponents();
             cameraSystem = new CameraSystem();
+            renderModelSystem = new RenderModelSystem();
+            CreateEntities();
         }
         private void CreateEntities()
         {
             var id = ComponentManager.Get().NewEntity();
+            var model = Content.Load<Model>("Chopper");
+            ComponentManager.Get().AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get().AddComponentsToEntity(new ModelComponent() { Model = model}, id);
 
-            ComponentManager.Get().AddComponentsToEntity(new CameraComponent() { near = 0f, far = 1000f, degree = 45f }, id);
         }
     }
 }

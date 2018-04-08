@@ -8,6 +8,5 @@ namespace _3D_Rendering_and_Transformation.Components
 {
     public interface IComponent
     {
-
     }
 }
