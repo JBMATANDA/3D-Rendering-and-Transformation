@@ -16,6 +16,8 @@ namespace Chopper_Game
         SpriteBatch spriteBatch;
         private CameraSystem cameraSystem;
         private RenderModelSystem renderModelSystem;
+        private TransformSystem transformSystem;
+
         Model model;
 
         public Game1()
@@ -25,6 +27,7 @@ namespace Chopper_Game
             Content.RootDirectory = "Content";
             cameraSystem = new CameraSystem();
             renderModelSystem = new RenderModelSystem();
+            transformSystem = new TransformSystem();
             
 
         }
@@ -80,7 +83,7 @@ namespace Chopper_Game
 
             // TODO: Add your update logic here
 
-            
+            transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
