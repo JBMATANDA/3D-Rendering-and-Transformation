@@ -13,6 +13,11 @@ namespace _3D_Rendering_and_Transformation.Managers
         private uint nextid;
         private Dictionary<Type, Dictionary<uint, IComponent>> Components = new Dictionary<Type, Dictionary<uint, IComponent>>();
 
+        internal object EntityComponent<T>(object key)
+        {
+            throw new NotImplementedException();
+        }
+
         private ComponentManager(){}
 
         public static ComponentManager Get

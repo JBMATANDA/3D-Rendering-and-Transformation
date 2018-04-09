@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace _3D_Rendering_and_Transformation.Components
 {
     public class HeightMapComponent :IComponent
     {
-        
+        public Texture2D HeightMap { get; set; }
+        public Effect Effect { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
     }
 }

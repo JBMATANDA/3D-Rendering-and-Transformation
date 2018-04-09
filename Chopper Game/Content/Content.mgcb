@@ -44,3 +44,15 @@
 /processorParam:TextureFormat=Color
 /build:US_Canyon.png
 
+#begin File.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:File.fx
+
+#begin effects.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:effects.fx
+

@@ -17,18 +17,22 @@ namespace Chopper_Game
         private CameraSystem cameraSystem;
         private RenderModelSystem renderModelSystem;
         private TransformSystem transformSystem;
+        private HeightMapSystem heightMapSystem;
 
+        Texture2D heightMap;
         Model model;
+        Effect effect;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-      
+
+            graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
             cameraSystem = new CameraSystem();
             renderModelSystem = new RenderModelSystem();
             transformSystem = new TransformSystem();
-            
+            heightMapSystem = new HeightMapSystem();
 
         }
 
@@ -55,10 +59,14 @@ namespace Chopper_Game
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             model = Content.Load<Model>("Chopper");
+            heightMap = Content.Load<Texture2D>("US_Canyon");
+            effect = Content.Load<Effect>("effects");
 
             CreateEntities();
             cameraSystem.Initialize(graphics);
-
+            heightMapSystem.LoadHeightData(heightMap);
+            heightMapSystem.SetUpVertices();
+            heightMapSystem.SetUpIndices();
             // TODO: use this.Content to load your game content here
         }
 
@@ -97,6 +105,7 @@ namespace Chopper_Game
 
             // TODO: Add your drawing code here
             renderModelSystem.Draw(gameTime);
+            heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
             base.Draw(gameTime);
         }
         private void ResetGame()
@@ -104,6 +113,7 @@ namespace Chopper_Game
             ComponentManager.Get.ClearComponents();
             cameraSystem = new CameraSystem();
             renderModelSystem = new RenderModelSystem();
+            heightMapSystem = new HeightMapSystem();
             CreateEntities();
         }
         private void CreateEntities()
@@ -112,6 +122,7 @@ namespace Chopper_Game
             
             ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model}, id);
+            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 4, Height = 3 }, id);
 
         }
     }
