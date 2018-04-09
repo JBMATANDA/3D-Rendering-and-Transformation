@@ -12,26 +12,26 @@ namespace _3D_Rendering_and_Transformation.Systems
 {
     public class CameraSystem
     {
-        GraphicsDevice graphicsDevice;
-        public void InitializeCamera()
+        
+        public void Initialize(GraphicsDeviceManager graphics)
         {
-            var cameraComponents = ComponentManager.Get().GetComponents<CameraComponent>();
+            var cameraComponents = ComponentManager.Get.GetComponents<CameraComponent>();
 
             foreach (var cameraComponent in cameraComponents)
             {
                 var camera = cameraComponent.Value as CameraComponent;
-                var _model = ComponentManager.Get().EntityComponent<ModelComponent>(cameraComponent.Key);
+                var _model = ComponentManager.Get.EntityComponent<ModelComponent>(cameraComponent.Key);
 
                 camera.CamPosition = new Vector3(0, 0, 20);
                 camera.CamTarget = new Vector3(0, 0, 0);
 
-                camera.AspectRatio = graphicsDevice.Viewport.AspectRatio;
+                float aspectRatio = graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
                 camera.Far = 1000f;
                 camera.Near = 0.1f;
 
                 camera.World = Matrix.Identity;
                 camera.View = Matrix.CreateLookAt(camera.CamPosition, camera.CamTarget, Vector3.Up);
-                camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, camera.AspectRatio,camera.Near,camera.Far);       
+                camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio,camera.Near,camera.Far);       
             }
         }
         

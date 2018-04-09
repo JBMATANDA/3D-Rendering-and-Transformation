@@ -15,13 +15,15 @@ namespace _3D_Rendering_and_Transformation.Managers
 
         private ComponentManager(){}
 
-        public static ComponentManager Get()
+        public static ComponentManager Get
         {
-            if(cm == null)
-            {
-                cm = new ComponentManager();
+            get {
+                if (cm == null)
+                {
+                    cm = new ComponentManager();
+                }
+                return cm;
             }
-            return cm;
         }
 
         public uint NewEntity()

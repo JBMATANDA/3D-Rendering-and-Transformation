@@ -54,6 +54,7 @@
     <Compile Include="Systems\HeightMapSystem.cs" />
     <Compile Include="Systems\RenderModelSystem.cs" />
     <Compile Include="Systems\MoveSystem.cs" />
+    <Compile Include="Systems\RotatorSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

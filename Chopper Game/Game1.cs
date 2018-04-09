@@ -16,6 +16,7 @@ namespace Chopper_Game
         SpriteBatch spriteBatch;
         private CameraSystem cameraSystem;
         private RenderModelSystem renderModelSystem;
+        Model model;
 
         public Game1()
         {
@@ -25,6 +26,7 @@ namespace Chopper_Game
             cameraSystem = new CameraSystem();
             renderModelSystem = new RenderModelSystem();
             
+
         }
 
         /// <summary>
@@ -36,7 +38,6 @@ namespace Chopper_Game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            cameraSystem.InitializeCamera();
 
             base.Initialize();
         }
@@ -49,7 +50,12 @@ namespace Chopper_Game
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-     
+
+            model = Content.Load<Model>("Chopper");
+
+            CreateEntities();
+            cameraSystem.Initialize(graphics);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -74,6 +80,7 @@ namespace Chopper_Game
 
             // TODO: Add your update logic here
 
+            
             base.Update(gameTime);
         }
 
@@ -91,17 +98,17 @@ namespace Chopper_Game
         }
         private void ResetGame()
         {
-            ComponentManager.Get().ClearComponents();
+            ComponentManager.Get.ClearComponents();
             cameraSystem = new CameraSystem();
             renderModelSystem = new RenderModelSystem();
             CreateEntities();
         }
         private void CreateEntities()
         {
-            var id = ComponentManager.Get().NewEntity();
-            var model = Content.Load<Model>("Chopper");
-            ComponentManager.Get().AddComponentsToEntity(new CameraComponent() { }, id);
-            ComponentManager.Get().AddComponentsToEntity(new ModelComponent() { Model = model}, id);
+            var id = ComponentManager.Get.NewEntity();
+            
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model}, id);
 
         }
     }

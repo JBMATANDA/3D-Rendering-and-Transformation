@@ -12,29 +12,27 @@ namespace _3D_Rendering_and_Transformation.Systems
 {
     public class RenderModelSystem
     {
-    
-        public void Draw(GameTime gameTime) {
 
-            var modelComponents = ComponentManager.Get().GetComponents<ModelComponent>();
-            
-            foreach(var modelComponent in modelComponents)
+        public void Draw(GameTime gameTime)
+        {
+
+            var modelComponents = ComponentManager.Get.GetComponents<ModelComponent>();
+
+            foreach (var modelComponent in modelComponents)
             {
                 var modelComp = modelComponent.Value as ModelComponent;
-                var transformation = ComponentManager.Get().EntityComponent<TransformComponent>(modelComponent.Key);
-                var camera = ComponentManager.Get().EntityComponent<CameraComponent>(modelComponent.Key);
+                var transformation = ComponentManager.Get.EntityComponent<TransformComponent>(modelComponent.Key);
+                var camera = ComponentManager.Get.EntityComponent<CameraComponent>(modelComponent.Key);
 
-               
-                foreach(ModelMesh mesh in modelComp.Model.Meshes)
+                foreach (ModelMesh mesh in modelComp.Model.Meshes)
                 {
                     foreach (BasicEffect eff in mesh.Effects)
                     {
-
+                        eff.EnableDefaultLighting();
                         eff.View = camera.View;
                         eff.World = mesh.ParentBone.Transform * modelComp.ObjectWorld * camera.World;
                         eff.Projection = camera.Projection;
 
-                        eff.EnableDefaultLighting();
-                        eff.LightingEnabled = true;
 
                         foreach (EffectPass pass in eff.CurrentTechnique.Passes)
                         {
@@ -42,8 +40,10 @@ namespace _3D_Rendering_and_Transformation.Systems
                             mesh.Draw();
                         }
                     }
+
                 }
             }
         }
-   }
+
+    }
 }
