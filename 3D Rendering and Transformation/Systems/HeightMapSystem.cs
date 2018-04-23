@@ -13,12 +13,20 @@ namespace _3D_Rendering_and_Transformation.Systems
     public class HeightMapSystem
     {
         VertexPositionColor[] vertices;
-
+        VertexBuffer vertexBuffer;
+        IndexBuffer indexBuffer;
         ComponentManager cm = ComponentManager.Get;
+        GraphicsDevice device;
 
         int[] indices;
         
         private float[,] heightData;
+
+        public void SetupVertexBuffer(Game game)
+        {
+            vertexBuffer = new VertexBuffer(game.GraphicsDevice, typeof(VertexPositionColor), vertices.Length, BufferUsage.None);
+            vertexBuffer.SetData(vertices);
+        }
 
         public void SetUpVertices()
         {
@@ -38,7 +46,11 @@ namespace _3D_Rendering_and_Transformation.Systems
                 }
             }
         }
-
+        public void SetupIndexBuffer(Game game)
+        {
+            indexBuffer = new IndexBuffer(game.GraphicsDevice, typeof(short), indices.Length, BufferUsage.None);
+            indexBuffer.SetData(indices);
+        }
         public void SetUpIndices()
         {
             var heightMapDictionary = cm.GetComponents<HeightMapComponent>();
@@ -105,8 +117,9 @@ namespace _3D_Rendering_and_Transformation.Systems
             heightMapComponent.Effect.Parameters["xProjection"].SetValue(camera.Projection);
             heightMapComponent.Effect.Parameters["xWorld"].SetValue(worldMatrix);
 
-            device.SetVertexBuffer(heightMapComponent.VertexBuffer);
-            device.Indices = heightMapComponent.IndexBuffer;
+
+            device.SetVertexBuffer(vertexBuffer);
+            device.Indices = indexBuffer;
 
             foreach (EffectPass pass in heightMapComponent.Effect.CurrentTechnique.Passes)
             {

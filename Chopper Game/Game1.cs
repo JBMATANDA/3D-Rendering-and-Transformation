@@ -13,6 +13,7 @@ namespace Chopper_Game
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
+        GraphicsDevice device;
         SpriteBatch spriteBatch;
         private CameraSystem cameraSystem;
         private RenderModelSystem renderModelSystem;
@@ -23,11 +24,15 @@ namespace Chopper_Game
         Model model;
         Effect effect;
         Vector3 position;
-
+       // Quaternion rotation;
+        Vector3 axis;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+           
             position = Vector3.Zero;
+            //rotation = new Quaternion();
+            axis = Vector3.Zero;
 
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
@@ -68,7 +73,9 @@ namespace Chopper_Game
             cameraSystem.Initialize(graphics);
             heightMapSystem.LoadHeightData(heightMap);
             heightMapSystem.SetUpVertices();
+          //  heightMapSystem.SetupVertexBuffer(this);
             heightMapSystem.SetUpIndices();
+          //  heightMapSystem.SetupIndexBuffer(this);
             // TODO: use this.Content to load your game content here
         }
 
@@ -123,7 +130,7 @@ namespace Chopper_Game
             var id = ComponentManager.Get.NewEntity();
             
             ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
-            ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position }, id);
+            ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis  }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model}, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);
 

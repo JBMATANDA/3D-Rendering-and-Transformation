@@ -58,38 +58,38 @@ namespace _3D_Rendering_and_Transformation.Systems
                 {
                     transform.Position.X += speed.X * elapsedGameTime;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                 {
                     transform.Position.Y += speed.Y * elapsedGameTime;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     transform.Position.Y -= speed.Y * elapsedGameTime;
                 }
                 // Rotate chooper
 
-                var axis3 = new Vector3(0, 0, 0);
                 if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
-                    axis3 = new Vector3(1f, 0, 0);
+                   transform.Axis = new Vector3(1f, 0, 0);
+                   
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    axis3 = new Vector3(-1f, 0, 0);
+                   transform.Axis = new Vector3(-1f, 0, 0);
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    axis3 = new Vector3(0, -1f, 0);
+                   transform.Axis = new Vector3(0, -1f, 0);
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    axis3 = new Vector3(0, 1f, 0);
+                   transform.Axis = new Vector3(0, 1f, 0);
                 }
 
 
                
-                var angle1 = -elapsedGameTime * rotationSpeed;
-                Quaternion rotation = Quaternion.CreateFromAxisAngle(axis3, angle1);
+                
+                Quaternion rotation = Quaternion.CreateFromAxisAngle(transform.Axis, angle);
                 rotation.Normalize();
                 transform.Rotation *= Matrix.CreateFromQuaternion(rotation);
 
