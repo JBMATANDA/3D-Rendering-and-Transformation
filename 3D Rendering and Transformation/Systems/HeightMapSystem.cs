@@ -14,13 +14,15 @@ namespace _3D_Rendering_and_Transformation.Systems
     {
         VertexPositionColor[] vertices;
 
+        ComponentManager cm = ComponentManager.Get;
+
         int[] indices;
         
         private float[,] heightData;
 
         public void SetUpVertices()
         {
-            var heightMapDictionary= ComponentManager.Get.GetComponents<HeightMapComponent>();
+            var heightMapDictionary= cm.GetComponents<HeightMapComponent>();
             foreach (var heightMapComp in heightMapDictionary)
             {
                 var heightMapComponent = heightMapComp.Value as HeightMapComponent;
@@ -39,7 +41,7 @@ namespace _3D_Rendering_and_Transformation.Systems
 
         public void SetUpIndices()
         {
-            var heightMapDictionary = ComponentManager.Get.GetComponents<HeightMapComponent>();
+            var heightMapDictionary = cm.GetComponents<HeightMapComponent>();
             foreach (var heightMapComp in heightMapDictionary)
             {
                 var heightMapComponent = heightMapComp.Value as HeightMapComponent;
@@ -83,8 +85,8 @@ namespace _3D_Rendering_and_Transformation.Systems
 
         public void Draw(GameTime gameTime, GraphicsDevice device)
         {
-            var heightMapDictionary = ComponentManager.Get.GetComponents<HeightMapComponent>();
-            var cameraDictionary = ComponentManager.Get.GetComponents<CameraComponent>();
+            var heightMapDictionary = cm.GetComponents<HeightMapComponent>();
+            var cameraDictionary = cm.GetComponents<CameraComponent>();
 
 
 

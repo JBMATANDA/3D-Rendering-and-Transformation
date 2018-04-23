@@ -13,5 +13,7 @@ namespace _3D_Rendering_and_Transformation.Components
         public Effect Effect { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public VertexBuffer VertexBuffer { get; set; }
+        public IndexBuffer IndexBuffer { get; set; }
     }
 }
