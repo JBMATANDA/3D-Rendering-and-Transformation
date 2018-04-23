@@ -22,10 +22,12 @@ namespace Chopper_Game
         Texture2D heightMap;
         Model model;
         Effect effect;
+        Vector3 position;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            position = Vector3.Zero;
 
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
@@ -121,8 +123,9 @@ namespace Chopper_Game
             var id = ComponentManager.Get.NewEntity();
             
             ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model}, id);
-            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 4, Height = 3 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);
 
         }
     }

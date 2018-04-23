@@ -11,9 +11,11 @@ namespace _3D_Rendering_and_Transformation.Components
     {
         public Vector3 Scale { get; set; }
         public Matrix Rotation { get; set; }
-        public Vector3 Position { get; set; }
-        public  float MAXROTATION { get ;set; }
-        public float Speed { get; set; }
-   
+        public Vector3 Position;
+     
+        public TransformComponent()
+        {
+            
+        }
     }
 }

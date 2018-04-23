@@ -2,6 +2,7 @@
 using _3D_Rendering_and_Transformation.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,13 @@ namespace _3D_Rendering_and_Transformation.Systems
             {
 
                 var modelComp = modelComponent.Value as ModelComponent;
+                var transform = ComponentManager.Get.EntityComponent<TransformComponent>(modelComponent.Key);
+                var camera = ComponentManager.Get.EntityComponent<CameraComponent>(modelComponent.Key);
 
-                float rotationSpeed = 0.01f;
-                float elapsedGameTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                float angle = -elapsedGameTime * rotationSpeed;
-
+                var rotationSpeed = 0.01f;
+                var elapsedGameTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                var angle = -elapsedGameTime * rotationSpeed;
+                var speed = new Vector3(0.1f, 0.1f, 0.1f);
                 //Propeller
                 var axis = Vector3.Up;
                 Quaternion rot = Quaternion.CreateFromAxisAngle(axis, angle);
@@ -39,6 +42,46 @@ namespace _3D_Rendering_and_Transformation.Systems
                     * Matrix.CreateFromQuaternion(rot2)
                     * Matrix.CreateTranslation(modelComp.Model.Bones[3].Transform.Translation);
 
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                {
+                    transform.Position.Z -= speed.Z * elapsedGameTime;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                {
+                    transform.Position.Z += speed.Z * elapsedGameTime;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                {
+                    transform.Position.X -= speed.X * elapsedGameTime;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    transform.Position.X += speed.X * elapsedGameTime;
+                }
+                // Rotate chooper
+
+                var axis3 = new Vector3(0, 0, 0);
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    axis = new Vector3(1f, 0, 0);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    axis = new Vector3(-1f, 0, 0);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    axis = new Vector3(0, -1f, 0);
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    axis = new Vector3(0, 1f, 0);
+                }
+                camera.World = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(transform.Position);
+
+                Quaternion rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+                rotation.Normalize();
+                transform.Rotation *= Matrix.CreateFromQuaternion(rotation);
             }
 
         }

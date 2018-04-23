@@ -97,7 +97,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             device.RasterizerState = rs;
 
 
-            Matrix worldMatrix = Matrix.CreateTranslation(-heightMapComponent.Width / 2.0f, 0, heightMapComponent.Height / 2.0f);
+            Matrix worldMatrix = Matrix.CreateTranslation(-heightMapComponent.Width / 2.0f, -0.5f*heightMapComponent.Height / 2.0f, 0f);
             heightMapComponent.Effect.CurrentTechnique = heightMapComponent.Effect.Techniques["ColoredNoShading"];
             heightMapComponent.Effect.Parameters["xView"].SetValue(camera.View);
             heightMapComponent.Effect.Parameters["xProjection"].SetValue(camera.Projection);
