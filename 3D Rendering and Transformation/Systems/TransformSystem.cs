@@ -42,6 +42,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                     * Matrix.CreateFromQuaternion(rot2)
                     * Matrix.CreateTranslation(modelComp.Model.Bones[3].Transform.Translation);
 
+                //MOVE CHOPPER
                 if (Keyboard.GetState().IsKeyDown(Keys.W))
                 {
                     transform.Position.Z -= speed.Z * elapsedGameTime;
