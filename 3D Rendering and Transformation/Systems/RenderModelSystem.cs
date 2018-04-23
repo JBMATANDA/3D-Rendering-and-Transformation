@@ -33,7 +33,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                         eff.World = mesh.ParentBone.Transform * modelComp.ObjectWorld * camera.World;
                         eff.Projection = camera.Projection;
 
-
+                        
                         foreach (EffectPass pass in eff.CurrentTechnique.Passes)
                         {
                             pass.Apply();

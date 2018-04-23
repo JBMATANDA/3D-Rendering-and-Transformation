@@ -105,6 +105,9 @@ namespace _3D_Rendering_and_Transformation.Systems
             heightMapComponent.Effect.Parameters["xProjection"].SetValue(camera.Projection);
             heightMapComponent.Effect.Parameters["xWorld"].SetValue(worldMatrix);
 
+            device.SetVertexBuffer(heightMapComponent.VertexBuffer);
+            device.Indices = heightMapComponent.IndexBuffer;
+
             foreach (EffectPass pass in heightMapComponent.Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();

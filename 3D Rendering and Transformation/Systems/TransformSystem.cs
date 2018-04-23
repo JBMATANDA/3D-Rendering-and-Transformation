@@ -58,30 +58,46 @@ namespace _3D_Rendering_and_Transformation.Systems
                 {
                     transform.Position.X += speed.X * elapsedGameTime;
                 }
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    transform.Position.Y += speed.Y * elapsedGameTime;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                {
+                    transform.Position.Y -= speed.Y * elapsedGameTime;
+                }
                 // Rotate chooper
 
                 var axis3 = new Vector3(0, 0, 0);
                 if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
-                    axis = new Vector3(1f, 0, 0);
+                    axis3 = new Vector3(1f, 0, 0);
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    axis = new Vector3(-1f, 0, 0);
+                    axis3 = new Vector3(-1f, 0, 0);
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    axis = new Vector3(0, -1f, 0);
+                    axis3 = new Vector3(0, -1f, 0);
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    axis = new Vector3(0, 1f, 0);
+                    axis3 = new Vector3(0, 1f, 0);
                 }
-                camera.World = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(transform.Position);
 
-                Quaternion rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+
+               
+                var angle1 = -elapsedGameTime * rotationSpeed;
+                Quaternion rotation = Quaternion.CreateFromAxisAngle(axis3, angle1);
                 rotation.Normalize();
                 transform.Rotation *= Matrix.CreateFromQuaternion(rotation);
+
+                modelComp.Model.Bones[0].Transform *= Matrix.CreateTranslation(-modelComp.Model.Bones[0].Transform.Translation)
+                    * Matrix.CreateFromQuaternion(rotation)
+                    * Matrix.CreateTranslation(modelComp.Model.Bones[0].Transform.Translation);
+
+                camera.World = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(transform.Position);
             }
 
         }
