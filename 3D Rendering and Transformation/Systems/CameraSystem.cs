@@ -13,7 +13,7 @@ namespace _3D_Rendering_and_Transformation.Systems
     public class CameraSystem
     {
         
-        public void Initialize(GraphicsDeviceManager graphics)
+        public void Update(GraphicsDeviceManager graphics, GameTime gameTime)
         {
             var cameraComponents = ComponentManager.Get.GetComponents<CameraComponent>();
 
@@ -22,8 +22,6 @@ namespace _3D_Rendering_and_Transformation.Systems
                 var camera = cameraComponent.Value as CameraComponent;
                 var _model = ComponentManager.Get.EntityComponent<ModelComponent>(cameraComponent.Key);
 
-                camera.CamPosition = new Vector3(0, 0, 20);
-                camera.CamTarget = new Vector3(0, 0, 0);
 
                 float aspectRatio = graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
                 camera.Far = 1000f;
@@ -34,6 +32,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                 camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio,camera.Near,camera.Far);       
             }
         }
+
         
     }
 }

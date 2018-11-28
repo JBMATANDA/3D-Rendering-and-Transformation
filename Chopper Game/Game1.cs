@@ -72,7 +72,7 @@ namespace Chopper_Game
             effect = Content.Load<Effect>("effects");
 
             CreateEntities();
-            cameraSystem.Initialize(graphics);
+
             heightMapSystem.LoadHeightData(heightMap);
             heightMapSystem.SetUpVertices();
           //  heightMapSystem.SetupVertexBuffer(this);
@@ -101,7 +101,7 @@ namespace Chopper_Game
                 Exit();
 
             // TODO: Add your update logic here
-
+            cameraSystem.Update(graphics, gameTime);
             transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
@@ -131,7 +131,7 @@ namespace Chopper_Game
         {
             var id = ComponentManager.Get.NewEntity();
             
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = new Vector3(0,0,20f), CamTarget = new Vector3(0,0,0) }, id);
             ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis  }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1}, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);

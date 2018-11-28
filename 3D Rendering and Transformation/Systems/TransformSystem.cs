@@ -65,6 +65,11 @@ namespace _3D_Rendering_and_Transformation.Systems
                    transform.Axis = new Vector3(0, 1f, 0);
                 }
 
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                {
+                    transform.Position.Z += -1f;
+                    camera.CamPosition.X += -1f;
+                }
                 Quaternion rotation = Quaternion.CreateFromAxisAngle(transform.Axis, angle);
                 rotation.Normalize();
                 transform.Rotation *= Matrix.CreateFromQuaternion(rotation);
