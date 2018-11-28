@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//TODO: Separate camera from transform.
 namespace _3D_Rendering_and_Transformation.Systems
 {
     public class TransformSystem
@@ -43,32 +44,30 @@ namespace _3D_Rendering_and_Transformation.Systems
                     * Matrix.CreateFromQuaternion(rot2)
                     * Matrix.CreateTranslation(modelComp.Model.Bones[3].Transform.Translation);
 
-                
-               transform.Position = new Vector3(0, 0, 0);
-                
-               
-                // Rotate chooper
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                {
-                   transform.Axis = new Vector3(1f, 0, 0);                 
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                {
-                   transform.Axis = new Vector3(-1f, 0, 0);
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                {
-                   transform.Axis = new Vector3(0, -1f, 0);
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                {
-                   transform.Axis = new Vector3(0, 1f, 0);
-                }
 
                 if (Keyboard.GetState().IsKeyDown(Keys.W))
                 {
+                    //Forward
                     transform.Position.Z += -1f;
-                    camera.CamPosition.X += -1f;
+                    //camera.CamPosition.Z += -1f;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                {
+                    //Left
+                    transform.Position.X += -1f;
+                    //camera.CamPosition.X += -1f;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                {
+                    //Backward
+                    transform.Position.Z += 1f;
+                    //camera.CamPosition.Z += 1f;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    //Right
+                    transform.Position.X += 1f;
+                    //camera.CamPosition.X += 1f;
                 }
                 Quaternion rotation = Quaternion.CreateFromAxisAngle(transform.Axis, angle);
                 rotation.Normalize();

@@ -10,7 +10,7 @@ namespace _3D_Rendering_and_Transformation.Components
     public class TransformComponent : IComponent
     {
         public Vector3 Scale { get; set; }
-        public Matrix Rotation { get; set; }
+        public Matrix Rotation;
         public Vector3 Position;
         public Vector3 Axis;
      
