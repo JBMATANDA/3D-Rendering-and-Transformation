@@ -24,7 +24,6 @@ namespace _3D_Rendering_and_Transformation.Systems
                 var transformation = ComponentManager.Get.EntityComponent<TransformComponent>(modelComponent.Key);
                 var camera = ComponentManager.Get.EntityComponent<CameraComponent>(modelComponent.Key);
 
-                
                 foreach (ModelMesh mesh in modelComp.Model.Meshes)
                 {
                     foreach (BasicEffect eff in mesh.Effects)

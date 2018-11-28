@@ -1,11 +1,8 @@
-﻿using _3D_Rendering_and_Transformation.Systems;
-using _3D_Rendering_and_Transformation.Managers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using _3D_Rendering_and_Transformation.Components;
 
-namespace Chopper_Game
+namespace Assignment2
 {
     /// <summary>
     /// This is the main type for your game.
@@ -13,35 +10,12 @@ namespace Chopper_Game
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        GraphicsDevice device;
         SpriteBatch spriteBatch;
-        private CameraSystem cameraSystem;
-        private RenderModelSystem renderModelSystem;
-        private TransformSystem transformSystem;
-        private HeightMapSystem heightMapSystem;
 
-        Texture2D heightMap;
-        Model model1;
-        
-        Effect effect;
-        Vector3 position;
-       // Quaternion rotation;
-        Vector3 axis;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-           
-            position = Vector3.Zero;
-            //rotation = new Quaternion();
-            axis = Vector3.Zero;
-
-            graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
-            cameraSystem = new CameraSystem();
-            renderModelSystem = new RenderModelSystem();
-            transformSystem = new TransformSystem();
-            heightMapSystem = new HeightMapSystem();
-
         }
 
         /// <summary>
@@ -66,18 +40,6 @@ namespace Chopper_Game
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            model1 = Content.Load<Model>("Chopper");
-            
-            heightMap = Content.Load<Texture2D>("US_Canyon");
-            effect = Content.Load<Effect>("effects");
-
-            CreateEntities();
-            cameraSystem.Initialize(graphics);
-            heightMapSystem.LoadHeightData(heightMap);
-            heightMapSystem.SetUpVertices();
-          //  heightMapSystem.SetupVertexBuffer(this);
-            heightMapSystem.SetUpIndices();
-          //  heightMapSystem.SetupIndexBuffer(this);
             // TODO: use this.Content to load your game content here
         }
 
@@ -102,7 +64,6 @@ namespace Chopper_Game
 
             // TODO: Add your update logic here
 
-            transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -115,27 +76,8 @@ namespace Chopper_Game
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            renderModelSystem.Draw(gameTime);
-            heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
-            base.Draw(gameTime);
-        }
-        private void ResetGame()
-        {
-            ComponentManager.Get.ClearComponents();
-            cameraSystem = new CameraSystem();
-            renderModelSystem = new RenderModelSystem();
-            heightMapSystem = new HeightMapSystem();
-            CreateEntities();
-        }
-        private void CreateEntities()
-        {
-            var id = ComponentManager.Get.NewEntity();
-            
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
-            ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis  }, id);
-            ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1}, id);
-            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);
 
+            base.Draw(gameTime);
         }
     }
 }

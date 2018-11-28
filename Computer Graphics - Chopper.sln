@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "3D Rendering 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chopper Game", "Chopper Game\Chopper Game.csproj", "{3703B583-016C-4D82-892C-0F48F78D21D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assignment2", "Assignment2\Assignment2.csproj", "{7E93B2F2-D8E0-4278-B68A-19B13A95527A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,6 +23,10 @@ Global
 		{3703B583-016C-4D82-892C-0F48F78D21D4}.Debug|x86.Build.0 = Debug|x86
 		{3703B583-016C-4D82-892C-0F48F78D21D4}.Release|x86.ActiveCfg = Release|x86
 		{3703B583-016C-4D82-892C-0F48F78D21D4}.Release|x86.Build.0 = Release|x86
+		{7E93B2F2-D8E0-4278-B68A-19B13A95527A}.Debug|x86.ActiveCfg = Debug|x86
+		{7E93B2F2-D8E0-4278-B68A-19B13A95527A}.Debug|x86.Build.0 = Debug|x86
+		{7E93B2F2-D8E0-4278-B68A-19B13A95527A}.Release|x86.ActiveCfg = Release|x86
+		{7E93B2F2-D8E0-4278-B68A-19B13A95527A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

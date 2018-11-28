@@ -15,5 +15,6 @@ namespace _3D_Rendering_and_Transformation.Components
         public int Height { get; set; }
         public VertexBuffer VertexBuffer { get; set; }
         public IndexBuffer IndexBuffer { get; set; }
+        public VertexPositionTexture[] Verticies { get; set; }
     }
 }
