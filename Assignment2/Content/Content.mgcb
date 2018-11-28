@@ -25,8 +25,9 @@
 /processorParam:TextureFormat=Color
 /build:US_Canyon.png
 
-#begin Tree.3mf
-/importer:
-/processor:
-/build:Tree.3mf
+#begin effects.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:effects.fx
 

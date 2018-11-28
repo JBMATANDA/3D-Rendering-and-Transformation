@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _3D_Rendering_and_Transformation.Systems;
+using _3D_Rendering_and_Transformation.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using _3D_Rendering_and_Transformation.Components;
 
 namespace Assignment2
 {
@@ -11,11 +14,19 @@ namespace Assignment2
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private HeightMapSystem heightMapSystem;
+        private CameraSystem cameraSystem;
+
+        Texture2D heightMap;
+        Effect effect;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            heightMapSystem = new HeightMapSystem();
+            cameraSystem = new CameraSystem();
         }
 
         /// <summary>
@@ -37,10 +48,17 @@ namespace Assignment2
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            heightMap = Content.Load<Texture2D>("US_Canyon");
+            effect = Content.Load<Effect>("effects");
 
-            // TODO: use this.Content to load your game content here
+            CreateEntities();
+            cameraSystem.Initialize(graphics);
+            heightMapSystem.LoadHeightData(heightMap);
+            heightMapSystem.SetUpVertices();
+            //  heightMapSystem.SetupVertexBuffer(this);
+            heightMapSystem.SetUpIndices();
         }
 
         /// <summary>
@@ -76,8 +94,19 @@ namespace Assignment2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
             base.Draw(gameTime);
+        }
+
+        private void CreateEntities()
+        {
+            var id = ComponentManager.Get.NewEntity();
+
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
+            //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);
+
         }
     }
 }
