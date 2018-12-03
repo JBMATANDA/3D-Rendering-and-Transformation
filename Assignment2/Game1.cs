@@ -20,10 +20,15 @@ namespace Assignment2
         Texture2D heightMap;
         Effect effect;
 
+        VertexPositionColor[] vertices;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
+
+            
 
             heightMapSystem = new HeightMapSystem();
             cameraSystem = new CameraSystem();
@@ -38,6 +43,27 @@ namespace Assignment2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            vertices = new VertexPositionColor[6] {
+            
+            
+            // top left
+            new VertexPositionColor(new Vector3(-1, 1, 0), Color.Green),
+            // bottom right
+            new VertexPositionColor(new Vector3(1, -1, 0), Color.Green),
+            // bottom left
+            new VertexPositionColor(new Vector3(-1, -1, 0), Color.Green),
+            // top right
+            new VertexPositionColor(new Vector3(1, 1, 0), Color.Red),
+            // bottom right
+            new VertexPositionColor(new Vector3(1, -1, 0), Color.Red),
+            // top left
+            new VertexPositionColor(new Vector3(-1, 1, 0), Color.Red)
+            };
+
+            
+            VertexBuffer buffer = new VertexBuffer(GraphicsDevice, VertexPositionColor.VertexDeclaration, 6, BufferUsage.WriteOnly);
+            buffer.SetData(vertices);
+            
 
             base.Initialize();
         }
@@ -54,11 +80,12 @@ namespace Assignment2
             effect = Content.Load<Effect>("effects");
 
             CreateEntities();
-            cameraSystem.Initialize(graphics);
+
             heightMapSystem.LoadHeightData(heightMap);
             heightMapSystem.SetUpVertices();
-            //  heightMapSystem.SetupVertexBuffer(this);
+            heightMapSystem.SetupVertexBuffer(this);
             heightMapSystem.SetUpIndices();
+            heightMapSystem.SetupIndexBuffer(this);
         }
 
         /// <summary>
@@ -81,7 +108,8 @@ namespace Assignment2
                 Exit();
 
             // TODO: Add your update logic here
-
+            
+            cameraSystem.Update(graphics, gameTime);
             base.Update(gameTime);
         }
 
@@ -94,7 +122,15 @@ namespace Assignment2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
+            //heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
+                                                               
+            
+            foreach(EffectPass pass in effect.CurrentTechnique.Passes) {
+                pass.Apply();
+            graphics.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, vertices.Length/3);
+            }
+            
+
             base.Draw(gameTime);
         }
 
@@ -102,7 +138,7 @@ namespace Assignment2
         {
             var id = ComponentManager.Get.NewEntity();
 
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = new Vector3(0,0,20f), CamTarget = new Vector3(0,0,0) }, id);
             //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
             //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);

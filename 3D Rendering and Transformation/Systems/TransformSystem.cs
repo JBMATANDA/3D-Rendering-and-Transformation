@@ -49,7 +49,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                 {
                     //Forward
                     transform.Position.Z += -1f;
-                    //camera.CamPosition.Z += -1f;
+                    camera.CamPosition.Z += -1f;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.A))
                 {
@@ -61,7 +61,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                 {
                     //Backward
                     transform.Position.Z += 1f;
-                    //camera.CamPosition.Z += 1f;
+                    camera.CamPosition.Z += 1f;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
@@ -77,7 +77,8 @@ namespace _3D_Rendering_and_Transformation.Systems
                     * Matrix.CreateFromQuaternion(rotation)
                     * Matrix.CreateTranslation(modelComp.Model.Bones[0].Transform.Translation);
 
-                camera.World = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(transform.Position);
+                camera.World = //Matrix.CreateRotationY(angle) * 
+                    Matrix.CreateTranslation(transform.Position);
             }
 
         }
