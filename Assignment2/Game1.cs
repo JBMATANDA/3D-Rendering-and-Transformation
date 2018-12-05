@@ -1,9 +1,9 @@
-﻿using _3D_Rendering_and_Transformation.Systems;
-using _3D_Rendering_and_Transformation.Managers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using _3D_Rendering_and_Transformation.Components;
+using _3D_Rendering_and_Transformation.Managers;
+using _3D_Rendering_and_Transformation.Systems;
 
 namespace Assignment2
 {
@@ -14,24 +14,29 @@ namespace Assignment2
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private HeightMapSystem heightMapSystem;
+        GraphicsDevice device;
         private CameraSystem cameraSystem;
-
+        private RenderModelSystem renderModelSystem;
+        private TransformSystem transformSystem;
+        private HeightMapSystem heightMapSystem;
         Texture2D heightMap;
-        Effect effect;
+        Model model1;
 
-        VertexPositionColor[] vertices;
+        Effect effect;
+        Vector3 position;
+        // Quaternion rotation;
+        Vector3 axis;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Content.RootDirectory = "Content";
-
-            
-
-            heightMapSystem = new HeightMapSystem();
             cameraSystem = new CameraSystem();
+            renderModelSystem = new RenderModelSystem();
+            transformSystem = new TransformSystem();
+            heightMapSystem = new HeightMapSystem();
         }
 
         /// <summary>
@@ -43,27 +48,6 @@ namespace Assignment2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            vertices = new VertexPositionColor[6] {
-            
-            
-            // top left
-            new VertexPositionColor(new Vector3(-1, 1, 0), Color.Green),
-            // bottom right
-            new VertexPositionColor(new Vector3(1, -1, 0), Color.Green),
-            // bottom left
-            new VertexPositionColor(new Vector3(-1, -1, 0), Color.Green),
-            // top right
-            new VertexPositionColor(new Vector3(1, 1, 0), Color.Red),
-            // bottom right
-            new VertexPositionColor(new Vector3(1, -1, 0), Color.Red),
-            // top left
-            new VertexPositionColor(new Vector3(-1, 1, 0), Color.Red)
-            };
-
-            
-            VertexBuffer buffer = new VertexBuffer(GraphicsDevice, VertexPositionColor.VertexDeclaration, 6, BufferUsage.WriteOnly);
-            buffer.SetData(vertices);
-            
 
             base.Initialize();
         }
@@ -74,18 +58,22 @@ namespace Assignment2
         /// </summary>
         protected override void LoadContent()
         {
+            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
+            model1 = Content.Load<Model>("Chopper");
+
             heightMap = Content.Load<Texture2D>("US_Canyon");
             effect = Content.Load<Effect>("effects");
 
             CreateEntities();
-
+            cameraSystem.Initialize(graphics);
             heightMapSystem.LoadHeightData(heightMap);
             heightMapSystem.SetUpVertices();
-            heightMapSystem.SetupVertexBuffer(this);
+            //  heightMapSystem.SetupVertexBuffer(this);
             heightMapSystem.SetUpIndices();
-            heightMapSystem.SetupIndexBuffer(this);
+            //  heightMapSystem.SetupIndexBuffer(this);
+            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -108,8 +96,7 @@ namespace Assignment2
                 Exit();
 
             // TODO: Add your update logic here
-            
-            cameraSystem.Update(graphics, gameTime);
+            transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -122,25 +109,18 @@ namespace Assignment2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            //heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
-                                                               
-            
-            foreach(EffectPass pass in effect.CurrentTechnique.Passes) {
-                pass.Apply();
-            graphics.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, vertices, 0, vertices.Length/3);
-            }
-            
+            renderModelSystem.Draw(gameTime);
+            heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
 
             base.Draw(gameTime);
         }
-
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
 
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = new Vector3(0,0,20f), CamTarget = new Vector3(0,0,0) }, id);
-            //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
-            //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
+            ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);
 
         }

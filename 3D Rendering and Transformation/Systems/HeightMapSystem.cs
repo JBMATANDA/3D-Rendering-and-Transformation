@@ -12,7 +12,7 @@ namespace _3D_Rendering_and_Transformation.Systems
 {
     public class HeightMapSystem
     {
-        VertexPositionColor[] vertices;
+        VertexPositionTexture[] vertices;
         VertexBuffer vertexBuffer;
         IndexBuffer indexBuffer;
         ComponentManager cm = ComponentManager.Get;
@@ -20,7 +20,7 @@ namespace _3D_Rendering_and_Transformation.Systems
 
         int[] indices;
         
-        private float[,] heightData;
+        private float[,] heightMapData;
 
         public void SetupVertexBuffer(Game game)
         {
@@ -30,19 +30,22 @@ namespace _3D_Rendering_and_Transformation.Systems
 
         public void SetUpVertices()
         {
+            Vector2 texturePosition;
             var heightMapDictionary= cm.GetComponents<HeightMapComponent>();
             foreach (var heightMapComp in heightMapDictionary)
             {
                 var heightMapComponent = heightMapComp.Value as HeightMapComponent;
 
-                vertices = new VertexPositionColor[heightMapComponent.Width * heightMapComponent.Height];
+                vertices = new VertexPositionTexture[heightMapComponent.Width * heightMapComponent.Height];
+              
                 for (int x = 0; x < heightMapComponent.Width; x++)
                 {
                     for (int y = 0; y < heightMapComponent.Height; y++)
                     {
-                        vertices[x + y * heightMapComponent.Width].Position = new Vector3(x, heightData[x, y], -y);
-                        vertices[x + y * heightMapComponent.Width].Color = Color.White;
+                        texturePosition = new Vector2((float)x / 25.5f, (float)y / 25.5f);
+                        vertices[x + y * heightMapComponent.Width] = new VertexPositionTexture(new Vector3(x, heightMapData[x, y], -y), texturePosition);
                     }
+                    device.VertexDeclaration = new VertexDeclaration(device, VertexPositionTexture.VertexElements);
                 }
             }
         }
@@ -89,12 +92,13 @@ namespace _3D_Rendering_and_Transformation.Systems
             Color[] heightMapColors = new Color[terrainWidth * terrainHeight];
             heightMap.GetData(heightMapColors);
 
-            heightData = new float[terrainWidth, terrainHeight];
+            heightMapData = new float[terrainWidth, terrainHeight];
             for (int x = 0; x < terrainWidth; x++)
                 for (int y = 0; y < terrainHeight; y++)
-                    heightData[x, y] = heightMapColors[x + y * terrainWidth].R / 5.0f;
+                    heightMapData[x, y] = heightMapColors[x + y * terrainWidth].R / 5.0f;
         }
 
+       
         public void Draw(GameTime gameTime, GraphicsDevice device)
         {
             var heightMapDictionary = cm.GetComponents<HeightMapComponent>();
