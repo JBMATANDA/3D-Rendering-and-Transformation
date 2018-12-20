@@ -42,6 +42,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="HumanModel\Body.cs" />
+    <Compile Include="HumanModel\Head.cs" />
+    <Compile Include="HumanModel\Humanoid.cs" />
+    <Compile Include="HumanModel\IHumanoid.cs" />
+    <Compile Include="HumanModel\LeftArm.cs" />
+    <Compile Include="HumanModel\LeftLeg.cs" />
+    <Compile Include="HumanModel\RightArm.cs" />
+    <Compile Include="HumanModel\RightLeg.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
