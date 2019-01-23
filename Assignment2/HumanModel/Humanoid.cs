@@ -52,7 +52,7 @@ namespace Assignment2.HumanModel
                 case "head":
                     scale = new Vector3(2, 2, 2);
                     break;
-                case "torso":
+                case "body":
                     scale = new Vector3(3, 5, 3);
                     break;
                 case "rightArm":
