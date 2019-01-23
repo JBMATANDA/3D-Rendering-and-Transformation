@@ -24,7 +24,7 @@ namespace _3D_Rendering_and_Transformation.Systems
 
         public void SetupVertexBuffer(Game game)
         {
-            vertexBuffer = new VertexBuffer(game.GraphicsDevice, typeof(VertexPositionColor), vertices.Length, BufferUsage.None);
+            vertexBuffer = new VertexBuffer(game.GraphicsDevice, typeof(VertexPositionColor), vertices.Length, BufferUsage.WriteOnly);
             vertexBuffer.SetData(vertices);
         }
 
@@ -48,7 +48,7 @@ namespace _3D_Rendering_and_Transformation.Systems
         }
         public void SetupIndexBuffer(Game game)
         {
-            indexBuffer = new IndexBuffer(game.GraphicsDevice, typeof(short), indices.Length, BufferUsage.None);
+            indexBuffer = new IndexBuffer(game.GraphicsDevice, typeof(short), indices.Length, BufferUsage.WriteOnly);
             indexBuffer.SetData(indices);
         }
         public void SetUpIndices()
