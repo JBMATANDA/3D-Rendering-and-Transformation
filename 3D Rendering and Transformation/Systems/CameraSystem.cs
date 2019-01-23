@@ -21,6 +21,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             {
                 var camera = cameraComponent.Value as CameraComponent;
                 var _model = ComponentManager.Get.EntityComponent<ModelComponent>(cameraComponent.Key);
+                var transform = ComponentManager.Get.EntityComponent<TransformComponent>(cameraComponent.Key);
 
 
                 float aspectRatio = graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
@@ -28,7 +29,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                 camera.Near = 0.1f;
 
                 camera.World = Matrix.Identity;
-                camera.View = Matrix.CreateLookAt(camera.CamPosition, camera.CamTarget, Vector3.Up);
+                camera.View = Matrix.CreateLookAt(camera.CamPosition, transform.Position, Vector3.Up);
                 camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio,camera.Near,camera.Far);       
             }
         }

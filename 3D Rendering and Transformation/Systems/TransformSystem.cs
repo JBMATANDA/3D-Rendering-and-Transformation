@@ -36,6 +36,8 @@ namespace _3D_Rendering_and_Transformation.Systems
                 rot.Normalize();
                 modelComp.Model.Bones[1].Transform *= Matrix.CreateFromQuaternion(rot);
 
+                
+
                 //Rotor
                 var axis2 = Vector3.Left;
                 Quaternion rot2 = Quaternion.CreateFromAxisAngle(axis2, angle);
@@ -55,7 +57,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                 {
                     //Left
                     transform.Position.X += -1f;
-                    //camera.CamPosition.X += -1f;
+                    camera.CamPosition.X += -1f;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.S))
                 {
@@ -67,11 +69,13 @@ namespace _3D_Rendering_and_Transformation.Systems
                 {
                     //Right
                     transform.Position.X += 1f;
-                    //camera.CamPosition.X += 1f;
+                    camera.CamPosition.X += 1f;
                 }
                 Quaternion rotation = Quaternion.CreateFromAxisAngle(transform.Axis, angle);
                 rotation.Normalize();
                 transform.Rotation *= Matrix.CreateFromQuaternion(rotation);
+
+                camera.CamTarget = transform.Rotation.Forward;
 
                 modelComp.Model.Bones[0].Transform *= Matrix.CreateTranslation(-modelComp.Model.Bones[0].Transform.Translation)
                     * Matrix.CreateFromQuaternion(rotation)

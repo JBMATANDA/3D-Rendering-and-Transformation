@@ -77,7 +77,7 @@ namespace Chopper_Game
             heightMapSystem.SetUpVertices();
             heightMapSystem.SetupVertexBuffer(this);
             heightMapSystem.SetUpIndices();
-            heightMapSystem.SetupIndexBuffer(this);
+            //heightMapSystem.SetupIndexBuffer(this);
             // TODO: use this.Content to load your game content here
         }
 
