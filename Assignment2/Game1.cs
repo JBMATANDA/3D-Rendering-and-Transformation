@@ -76,11 +76,8 @@ namespace Assignment2
 
 
             CreateEntities();
-            heightMapSystem.LoadHeightData(heightMap);
-            heightMapSystem.SetUpVertices();
-            //  heightMapSystem.SetupVertexBuffer(this);
-            heightMapSystem.SetUpIndices();
-            //  heightMapSystem.SetupIndexBuffer(this);
+            heightMapSystem.SetUpHeightMap(this, heightMap);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -130,7 +127,7 @@ namespace Assignment2
             ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = new Vector3(0, 0, 20f), CamTarget = new Vector3(0, 0, 0) }, id);
             ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
-            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1000, Height = 500 }, id);
 
         }
     }

@@ -17,10 +17,22 @@ namespace _3D_Rendering_and_Transformation.Systems
         IndexBuffer indexBuffer;
         ComponentManager cm = ComponentManager.Get;
         GraphicsDevice device;
+        Game game;
 
         int[] indices;
         
         private float[,] heightData;
+
+        public void SetUpHeightMap(Game game, Texture2D heightMap)
+        {
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
+            effect.TextureEnabled = true;
+            LoadHeightData(heightMap);
+            SetUpVertices();
+            SetupVertexBuffer(game);
+            SetUpIndices();
+            SetupIndexBuffer(game);
+        }
 
         public void SetupVertexBuffer(Game game)
         {
@@ -132,7 +144,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             heightMapComponent.Effect.Parameters["xView"].SetValue(camera.View);
             heightMapComponent.Effect.Parameters["xProjection"].SetValue(camera.Projection);
             heightMapComponent.Effect.Parameters["xWorld"].SetValue(worldMatrix);
-
+            heightMapComponent.Effect.Parameters["xTexture"].SetValue(heightMapComponent.Texture);
 
             device.SetVertexBuffer(vertexBuffer);
             device.Indices = indexBuffer;
