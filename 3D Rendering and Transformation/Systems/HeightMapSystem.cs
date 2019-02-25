@@ -54,7 +54,7 @@ namespace _3D_Rendering_and_Transformation.Systems
         public void SetupIndexBuffer(Game game)
         {
             indexBuffer = new IndexBuffer(game.GraphicsDevice, typeof(short), indices.Length, BufferUsage.None);
-           // indexBuffer.SetData(indices);
+            indexBuffer.SetData(indices);
         }
         public void SetUpIndices()
         {
@@ -121,10 +121,10 @@ namespace _3D_Rendering_and_Transformation.Systems
             var heightMapComponent = (HeightMapComponent)heightMapDictionary[0];
             var camera = (CameraComponent)cameraDictionary[0];
 
-            RasterizerState rs = new RasterizerState();
-            rs.CullMode = CullMode.None;
-            rs.FillMode = FillMode.WireFrame;
-            device.RasterizerState = rs;
+            //RasterizerState rs = new RasterizerState();
+            //rs.CullMode = CullMode.None;
+            //rs.FillMode = FillMode.WireFrame;
+            //device.RasterizerState = rs;
 
 
             Matrix worldMatrix = Matrix.CreateTranslation(-heightMapComponent.Width / 2.0f, -0.5f*heightMapComponent.Height / 2.0f, 0f);

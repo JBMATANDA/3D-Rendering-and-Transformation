@@ -10,18 +10,23 @@ namespace Assignment2.HumanModel
 {
     public abstract class Humanoid : IHumanoid
     {
-        public Matrix world;
+        public Matrix humWorld;
 
         public Vector3 scale;
 
-        private static readonly Vector3 FRONT_TOP_LEFT = new Vector3(-1f, 1f, 1f);
-        private static readonly Vector3 FRONT_TOP_RIGHT = new Vector3(1f, 1f, 1f);
-        private static readonly Vector3 FRONT_BOTTOM_LEFT = new Vector3(-1f, -1f, 1f);
-        private static readonly Vector3 FRONT_BOTTOM_RIGHT = new Vector3(1f, -1f, 1f);
-        private static readonly Vector3 BACK_TOP_LEFT = new Vector3(-1f, 1f, -1f);
-        private static readonly Vector3 BACK_TOP_RIGHT = new Vector3(1f, 1f, -1f);
-        private static readonly Vector3 BACK_BOTTOM_LEFT = new Vector3(-1f, -1f, -1f);
-        private static readonly Vector3 BACK_BOTTOM_RIGHT = new Vector3(1f, -1f, -1f);
+        protected Texture2D texture;
+        protected BasicEffect effect;
+        private Matrix view;
+        private Matrix projection;
+
+        private static readonly Vector3 FRONT_TOP_LEFT = new Vector3(-0.5f, 0.5f, 0.5f);
+        private static readonly Vector3 FRONT_TOP_RIGHT = new Vector3(0.5f, 0.5f, 0.5f);
+        private static readonly Vector3 FRONT_BOTTOM_LEFT = new Vector3(-0.5f, -0.5f, 0.5f);
+        private static readonly Vector3 FRONT_BOTTOM_RIGHT = new Vector3(0.5f, -0.5f, 0.5f);
+        private static readonly Vector3 BACK_TOP_LEFT = new Vector3(-0.5f, 0.5f, -0.5f);
+        private static readonly Vector3 BACK_TOP_RIGHT = new Vector3(0.5f, 0.5f, -0.5f);
+        private static readonly Vector3 BACK_BOTTOM_LEFT = new Vector3(-0.5f, -0.5f, -0.5f);
+        private static readonly Vector3 BACK_BOTTOM_RIGHT = new Vector3(0.5f, -0.5f, -0.5f);
 
         private static readonly Vector3 RIGHT = new Vector3(1, 0, 0);
         private static readonly Vector3 LEFT = new Vector3(-1, 0, 0);
@@ -30,19 +35,55 @@ namespace Assignment2.HumanModel
         private static readonly Vector3 FORWARD = new Vector3(0, 0, 1);
         private static readonly Vector3 BACKWARD = new Vector3(0, 0, -1);
 
-        private VertexPositionNormalTexture[] vertices;
-        private short[] indices;
+        protected VertexPositionNormalTexture[] vertices;
+        protected short[] indices;
+        private Game game;
+        protected VertexBuffer vertexBuffer;
+        protected IndexBuffer indexBuffer;
 
-        public Humanoid(string limb)
+        public Humanoid(Game game, string limb)
         {
+            this.game = game;
+
             DetermineLimb(limb);
         }
 
         public void Load()
         {
-            world = Matrix.Identity;
+            humWorld = Matrix.Identity;
+
+            texture = game.Content.Load<Texture2D>("quikscopeobama");
+           
+
+            humWorld = Matrix.Identity;
             SetupVertices();
+            SetupVertexBuffer();
+
             SetupIndices();
+            SetupIndexBuffer();
+            SetEffects();
+            SetupCamera();
+        }
+
+        private void SetEffects()
+        {
+            SetupCamera();
+
+            effect = new BasicEffect(game.GraphicsDevice);
+            effect.View = view;
+            effect.Projection = projection;
+            effect.TextureEnabled = true;
+            effect.Texture = texture;
+            effect.EnableDefaultLighting();
+
+
+
+        }
+
+        private void SetupCamera()
+        {
+            view = Matrix.CreateLookAt(new Vector3(0, 0, 20), new Vector3(0, 0, 0), Vector3.Up);
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
         }
 
         public void DetermineLimb(string limb)
@@ -135,14 +176,28 @@ namespace Assignment2.HumanModel
             indices = indexList.ToArray();
         }
 
-        public void DrawLimb(GameTime gameTime, Matrix World)
+        private void SetupVertexBuffer()
         {
-            throw new NotImplementedException();
+            if (vertexBuffer == null)
+            {
+                vertexBuffer = new VertexBuffer(game.GraphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                vertexBuffer.SetData(vertices);
+            }
         }
 
-        public void UpdateLimb(GameTime gameTime)
+        private void SetupIndexBuffer()
         {
-            throw new NotImplementedException();
+            indexBuffer = new IndexBuffer(game.GraphicsDevice, typeof(short), indices.Length, BufferUsage.None);
+            indexBuffer.SetData(indices);
+        }
+
+
+        public virtual void DrawLimb(GameTime gameTime, Matrix world)
+        {
+        }
+
+        public virtual void UpdateLimb(GameTime gameTime)
+        {
         }
     }
 }

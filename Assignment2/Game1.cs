@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using _3D_Rendering_and_Transformation.Components;
 using _3D_Rendering_and_Transformation.Managers;
 using _3D_Rendering_and_Transformation.Systems;
+using Assignment2.HumanModel;
 
 namespace Assignment2
 {
@@ -13,7 +14,7 @@ namespace Assignment2
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        //SpriteBatch spriteBatch;
         GraphicsDevice device;
         private CameraSystem cameraSystem;
         private RenderModelSystem renderModelSystem;
@@ -26,6 +27,9 @@ namespace Assignment2
         Vector3 position;
         // Quaternion rotation;
         Vector3 axis;
+        private Matrix world;
+        private Body humanoid;
+        private Texture2D texture;
 
         public Game1()
         {
@@ -37,6 +41,7 @@ namespace Assignment2
             renderModelSystem = new RenderModelSystem();
             transformSystem = new TransformSystem();
             heightMapSystem = new HeightMapSystem();
+            
         }
 
         /// <summary>
@@ -48,6 +53,8 @@ namespace Assignment2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            world = Matrix.Identity;
+            humanoid = new Body(this);
 
             base.Initialize();
         }
@@ -59,15 +66,16 @@ namespace Assignment2
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            //spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            model1 = Content.Load<Model>("Chopper");
-
             heightMap = Content.Load<Texture2D>("US_Canyon");
             effect = Content.Load<Effect>("effects");
+            texture = Content.Load<Texture2D>("quikscopeobama");
+
+
+
 
             CreateEntities();
-            cameraSystem.Initialize(graphics);
             heightMapSystem.LoadHeightData(heightMap);
             heightMapSystem.SetUpVertices();
             //  heightMapSystem.SetupVertexBuffer(this);
@@ -94,9 +102,11 @@ namespace Assignment2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            cameraSystem.Update(graphics, gameTime);
 
+            humanoid.UpdateLimb(gameTime);
             // TODO: Add your update logic here
-            transformSystem.Update(gameTime);
+            //transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -109,16 +119,15 @@ namespace Assignment2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            renderModelSystem.Draw(gameTime);
+            //renderModelSystem.Draw(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
-
+            humanoid.DrawLimb(gameTime, world);
             base.Draw(gameTime);
         }
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
-
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = new Vector3(0, 0, 20f), CamTarget = new Vector3(0, 0, 0) }, id);
             ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Effect = effect, Width = 1000, Height = 500 }, id);

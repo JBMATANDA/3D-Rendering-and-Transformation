@@ -9,7 +9,7 @@ namespace Assignment2.HumanModel
 {
     public interface IHumanoid 
     {
-        void DrawLimb(GameTime gameTime, Matrix World);
+        void DrawLimb(GameTime gameTime, Matrix world);
         void UpdateLimb(GameTime gameTime);
     }
 }
