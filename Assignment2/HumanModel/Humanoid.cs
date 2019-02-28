@@ -18,6 +18,7 @@ namespace Assignment2.HumanModel
         protected BasicEffect effect;
         private Matrix view;
         private Matrix projection;
+        protected Vector3 camPosition;
 
         private static readonly Vector3 FRONT_TOP_LEFT = new Vector3(-0.5f, 0.5f, 0.5f);
         private static readonly Vector3 FRONT_TOP_RIGHT = new Vector3(0.5f, 0.5f, 0.5f);
@@ -46,6 +47,8 @@ namespace Assignment2.HumanModel
             this.game = game;
 
             DetermineLimb(limb);
+            camPosition = new Vector3(0, 0, 20);
+
         }
 
         public void Load()
@@ -62,12 +65,12 @@ namespace Assignment2.HumanModel
             SetupIndices();
             SetupIndexBuffer();
             SetEffects();
-            SetupCamera();
+            //SetupCamera();
         }
 
         private void SetEffects()
         {
-            SetupCamera();
+            //SetupCamera();
 
             effect = new BasicEffect(game.GraphicsDevice);
             effect.View = view;

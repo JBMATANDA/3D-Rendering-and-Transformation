@@ -99,7 +99,7 @@ namespace Assignment2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            cameraSystem.Update(graphics, gameTime);
+            //cameraSystem.Update(graphics, gameTime);
 
             humanoid.UpdateLimb(gameTime);
             // TODO: Add your update logic here

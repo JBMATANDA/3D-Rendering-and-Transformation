@@ -15,6 +15,7 @@ namespace Assignment2.HumanModel
         private Game game;
         public Vector3 parentPosition;
         public Vector3 parentRotation;
+        private Vector3 cameraPosition;
 
         private Matrix limbWorld;
 
@@ -26,6 +27,7 @@ namespace Assignment2.HumanModel
             
             scale = new Vector3(3, 5, 3);
             parentPosition = new Vector3(0, 1, 0);
+            cameraPosition = new Vector3(0, 0, 20f);
 
             humanoid.Add(new Head(game, new Vector3(0, 4.8f, 0)));
             humanoid.Add(new RightArm(game, new Vector3(2.2f, 1.5f, 0)));
@@ -41,6 +43,9 @@ namespace Assignment2.HumanModel
 
             game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
             game.GraphicsDevice.Indices = indexBuffer;
+            
+            effect.View = Matrix.CreateLookAt(cameraPosition, parentPosition, Vector3.Up);
+            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
             foreach (EffectPass ep in effect.CurrentTechnique.Passes)
             {
@@ -67,6 +72,12 @@ namespace Assignment2.HumanModel
                 }
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                parentPosition.Z -= 0.05f;
+                camPosition = new Vector3(camPosition.X, camPosition.Y, camPosition.Z - 0.05f);
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 parentRotation = new Vector3(parentRotation.X + 0.05f, parentRotation.Y, parentRotation.Z);
@@ -77,9 +88,12 @@ namespace Assignment2.HumanModel
                 }
             }
 
+            
+
             humWorld = Matrix.Identity *
                 Matrix.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z)) *
                 Matrix.CreateTranslation(parentPosition);
+            
 
             // Here is where all the children are updated
             foreach (IHumanoid child in humanoid)

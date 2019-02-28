@@ -14,6 +14,7 @@ namespace Assignment2.HumanModel
         private Game game;
         public Matrix limbWorld;
         private Vector3 position;
+        private Vector3 jointPosition = new Vector3(0, 1, 0);
         private Vector3 rotation = Vector3.Zero;
         
         public Head(Game game, Vector3 position) : base(game, "head")
@@ -32,6 +33,10 @@ namespace Assignment2.HumanModel
 
             game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
             game.GraphicsDevice.Indices = indexBuffer;
+
+
+            effect.View = Matrix.CreateLookAt(camPosition, jointPosition, Vector3.Up);
+            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
             foreach (EffectPass ep in effect.CurrentTechnique.Passes)
             {
