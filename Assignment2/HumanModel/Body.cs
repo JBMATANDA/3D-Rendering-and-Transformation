@@ -44,9 +44,6 @@ namespace Assignment2.HumanModel
             game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
             game.GraphicsDevice.Indices = indexBuffer;
             
-            effect.View = Matrix.CreateLookAt(cameraPosition, parentPosition, Vector3.Up);
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
-
             foreach (EffectPass ep in effect.CurrentTechnique.Passes)
             {
                 ep.Apply();
@@ -93,13 +90,17 @@ namespace Assignment2.HumanModel
             humWorld = Matrix.Identity *
                 Matrix.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z)) *
                 Matrix.CreateTranslation(parentPosition);
-            
+
 
             // Here is where all the children are updated
             foreach (IHumanoid child in humanoid)
             {
                 child.UpdateLimb(gameTime);
             }
+
+            //effect.View = Matrix.CreateLookAt(cameraPosition, parentPosition, Vector3.Up);
+            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+
         }
     }
 }

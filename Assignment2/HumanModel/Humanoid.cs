@@ -61,7 +61,6 @@ namespace Assignment2.HumanModel
             humWorld = Matrix.Identity;
             SetupVertices();
             SetupVertexBuffer();
-
             SetupIndices();
             SetupIndexBuffer();
             SetEffects();

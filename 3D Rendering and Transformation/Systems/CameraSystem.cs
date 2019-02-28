@@ -22,15 +22,20 @@ namespace _3D_Rendering_and_Transformation.Systems
                 var camera = cameraComponent.Value as CameraComponent;
                 var _model = ComponentManager.Get.EntityComponent<ModelComponent>(cameraComponent.Key);
                 var transform = ComponentManager.Get.EntityComponent<TransformComponent>(cameraComponent.Key);
+                var target = camera.CamTarget;
 
+                if (transform.Position != null)
+                {
+                    target = transform.Position;
+                }
 
                 float aspectRatio = graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
                 camera.Far = 1000f;
                 camera.Near = 0.1f;
 
                 camera.World = Matrix.Identity;
-                camera.View = Matrix.CreateLookAt(camera.CamPosition, transform.Position, Vector3.Up);
-                camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio,camera.Near,camera.Far);       
+                camera.View = Matrix.CreateLookAt(camera.CamPosition, target, Vector3.Up);
+                camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, camera.Near, camera.Far);       
             }
         }
 

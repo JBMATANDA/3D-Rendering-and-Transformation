@@ -5,6 +5,7 @@ using _3D_Rendering_and_Transformation.Components;
 using _3D_Rendering_and_Transformation.Managers;
 using _3D_Rendering_and_Transformation.Systems;
 using Assignment2.HumanModel;
+using Assignment2.Systems;
 
 namespace Assignment2
 {
@@ -22,17 +23,21 @@ namespace Assignment2
         private HeightMapSystem heightMapSystem;
         Texture2D heightMap;
         Model model1;
-
-        Effect effect;
+        BasicEffect bEffect;
+        
         Vector3 position;
         // Quaternion rotation;
         Vector3 axis;
         private Matrix world;
         private Body humanoid;
         private Texture2D texture;
+        private Vector3 humanoidPosition;
+        private Effect effect;
+        private PlayerCameraSystem playerCameraSystem;
 
         public Game1()
         {
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
@@ -53,9 +58,12 @@ namespace Assignment2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            world = Matrix.Identity;
+
             humanoid = new Body(this);
 
+            playerCameraSystem = new PlayerCameraSystem(humanoid.humWorld);
+            world = Matrix.Identity;
+            humanoid.parentPosition = humanoidPosition;
             base.Initialize();
         }
 
@@ -69,13 +77,13 @@ namespace Assignment2
             //spriteBatch = new SpriteBatch(GraphicsDevice);
             
             heightMap = Content.Load<Texture2D>("US_Canyon");
+            bEffect = new BasicEffect(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             texture = Content.Load<Texture2D>("quikscopeobama");
-
-
-
+            
 
             CreateEntities();
+            
             heightMapSystem.SetUpHeightMap(this, heightMap);
 
             // TODO: use this.Content to load your game content here
@@ -99,8 +107,8 @@ namespace Assignment2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            //cameraSystem.Update(graphics, gameTime);
-
+            cameraSystem.Update(graphics, gameTime);
+            playerCameraSystem.Update(gameTime);
             humanoid.UpdateLimb(gameTime);
             // TODO: Add your update logic here
             //transformSystem.Update(gameTime);
@@ -124,7 +132,7 @@ namespace Assignment2
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = new Vector3(0, 0, 20f), CamTarget = new Vector3(0, 0, 0) }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = humanoidPosition + Vector3.Forward * 20, CamTarget = humanoidPosition }, id);
             ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1000, Height = 500 }, id);
