@@ -15,7 +15,7 @@ namespace Assignment2.HumanModel
         public Vector3 scale;
 
         protected Texture2D texture;
-        protected BasicEffect effect;
+        public BasicEffect effect;
         private Matrix view;
         private Matrix projection;
         protected Vector3 camPosition;
@@ -72,8 +72,8 @@ namespace Assignment2.HumanModel
             //SetupCamera();
 
             effect = new BasicEffect(game.GraphicsDevice);
-            effect.View = view;
-            effect.Projection = projection;
+            //effect.View = view;
+            //effect.Projection = projection;
             effect.TextureEnabled = true;
             effect.Texture = texture;
             effect.EnableDefaultLighting();

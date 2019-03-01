@@ -11,13 +11,13 @@ namespace Assignment2.HumanModel
 {
     public class Body : Humanoid
     {
-        List<Humanoid> humanoid = new List<Humanoid>();
+        public List<Humanoid> humanoid = new List<Humanoid>();
         private Game game;
         public Vector3 parentPosition;
         public Vector3 parentRotation;
         private Vector3 cameraPosition;
 
-        private Matrix limbWorld;
+        public Matrix limbWorld;
 
         public Body(Game game) : base(game, "body")
         {
@@ -26,7 +26,7 @@ namespace Assignment2.HumanModel
 
             
             scale = new Vector3(3, 5, 3);
-            parentPosition = new Vector3(0, 1, 0);
+            parentPosition = new Vector3(10, 1, 0);
             cameraPosition = new Vector3(0, 0, 20f);
 
             humanoid.Add(new Head(game, new Vector3(0, 4.8f, 0)));
@@ -43,7 +43,10 @@ namespace Assignment2.HumanModel
 
             game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
             game.GraphicsDevice.Indices = indexBuffer;
-            
+
+            //effect.View = Matrix.CreateLookAt(camPosition, parentPosition, Vector3.Up);
+            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+
             foreach (EffectPass ep in effect.CurrentTechnique.Passes)
             {
                 ep.Apply();
@@ -72,7 +75,7 @@ namespace Assignment2.HumanModel
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 parentPosition.Z -= 0.05f;
-                camPosition = new Vector3(camPosition.X, camPosition.Y, camPosition.Z - 0.05f);
+                camPosition.Z -= 0.05f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -98,8 +101,6 @@ namespace Assignment2.HumanModel
                 child.UpdateLimb(gameTime);
             }
 
-            //effect.View = Matrix.CreateLookAt(cameraPosition, parentPosition, Vector3.Up);
-            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
         }
     }

@@ -34,6 +34,7 @@ namespace Assignment2
         private Vector3 humanoidPosition;
         private Effect effect;
         private PlayerCameraSystem playerCameraSystem;
+        private PlayerRenderSystem playerRenderSystem;
 
         public Game1()
         {
@@ -61,7 +62,8 @@ namespace Assignment2
 
             humanoid = new Body(this);
 
-            playerCameraSystem = new PlayerCameraSystem(humanoid.humWorld);
+            playerCameraSystem = new PlayerCameraSystem(humanoid);
+            playerRenderSystem = new PlayerRenderSystem(humanoid.effect);
             world = Matrix.Identity;
             humanoid.parentPosition = humanoidPosition;
             base.Initialize();
@@ -107,10 +109,11 @@ namespace Assignment2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            cameraSystem.Update(graphics, gameTime);
+            //cameraSystem.Update(graphics, gameTime);
             playerCameraSystem.Update(gameTime);
             humanoid.UpdateLimb(gameTime);
             // TODO: Add your update logic here
+
             //transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
@@ -125,14 +128,15 @@ namespace Assignment2
 
             // TODO: Add your drawing code here
             //renderModelSystem.Draw(gameTime);
+            playerRenderSystem.Update(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
-            humanoid.DrawLimb(gameTime, world);
+            //humanoid.DrawLimb(gameTime, world);
             base.Draw(gameTime);
         }
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { CamPosition = humanoidPosition + Vector3.Forward * 20, CamTarget = humanoidPosition }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
             ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
             ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1000, Height = 500 }, id);

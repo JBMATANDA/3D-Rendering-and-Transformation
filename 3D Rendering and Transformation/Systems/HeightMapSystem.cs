@@ -29,9 +29,9 @@ namespace _3D_Rendering_and_Transformation.Systems
             effect.TextureEnabled = true;
             LoadHeightData(heightMap);
             SetUpVertices();
-            SetupVertexBuffer(game);
+            //SetupVertexBuffer(game);
             SetUpIndices();
-            SetupIndexBuffer(game);
+            //SetupIndexBuffer(game);
         }
 
         public void SetupVertexBuffer(Game game)

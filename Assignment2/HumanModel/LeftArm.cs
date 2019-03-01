@@ -37,8 +37,8 @@ namespace Assignment2.HumanModel
             game.GraphicsDevice.Indices = indexBuffer;
 
 
-            effect.View = Matrix.CreateLookAt(camPosition, jointPosition, Vector3.Up);
-            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+            //effect.View = Matrix.CreateLookAt(camPosition, jointPosition, Vector3.Up);
+            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
             foreach (EffectPass ep in effect.CurrentTechnique.Passes)
             {

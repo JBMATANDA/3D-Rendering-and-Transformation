@@ -1,7 +1,7 @@
 ﻿using _3D_Rendering_and_Transformation.Components;
 using _3D_Rendering_and_Transformation.Managers;
-using Assignment2.HumanModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace Assignment2.Systems
 {
-    public class PlayerCameraSystem
+    public class PlayerRenderSystem
     {
-        private Body human;
-        public PlayerCameraSystem(Body human)
+        private BasicEffect effect;
+
+        public PlayerRenderSystem(BasicEffect effect)
         {
-            this.human = human;
+            this.effect = effect;
         }
 
         public void Update(GameTime gameTime)
@@ -23,15 +24,11 @@ namespace Assignment2.Systems
             var cameraComponents = ComponentManager.Get.GetComponents<CameraComponent>();
             foreach (CameraComponent cameraComp in cameraComponents.Values)
             {
-                Vector3 cameraPosition = human.humWorld.Translation + human.humWorld.Backward * 40f;
-                Vector3 cameraLookAt = human.humWorld.Translation;
-
-                cameraComp.View = Matrix.CreateLookAt(cameraPosition, cameraLookAt, Vector3.Up);
-
-
+                effect.EnableDefaultLighting();
+                effect.View = cameraComp.View;
+                effect.Projection = cameraComp.Projection;
+                //effect.World = cameraComp.World;
             }
         }
-        
-        
     }
 }
