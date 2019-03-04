@@ -26,8 +26,8 @@ namespace Assignment2.HumanModel
 
             
             scale = new Vector3(3, 5, 3);
-            parentPosition = new Vector3(10, 1, 0);
-            cameraPosition = new Vector3(0, 0, 20f);
+            parentPosition = Vector3.Zero;
+           
 
             humanoid.Add(new Head(game, new Vector3(0, 4.8f, 0)));
             humanoid.Add(new RightArm(game, new Vector3(2.2f, 1.5f, 0)));
@@ -45,7 +45,7 @@ namespace Assignment2.HumanModel
             game.GraphicsDevice.Indices = indexBuffer;
 
             //effect.View = Matrix.CreateLookAt(camPosition, parentPosition, Vector3.Up);
-            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
             foreach (EffectPass ep in effect.CurrentTechnique.Passes)
             {
@@ -74,8 +74,24 @@ namespace Assignment2.HumanModel
 
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                parentPosition.Z -= 0.05f;
-                camPosition.Z -= 0.05f;
+                parentPosition.Z -= 0.5f;
+            }
+
+             if(Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                parentPosition.Z += 0.5f;
+            }
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                parentPosition.Y += 0.5f;
+            }
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                parentPosition.Y -= 0.5f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -87,8 +103,9 @@ namespace Assignment2.HumanModel
                     parentRotation.X -= 0.05f;
                 }
             }
-
+            Quaternion rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
             
+
 
             humWorld = Matrix.Identity *
                 Matrix.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z)) *

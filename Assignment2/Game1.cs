@@ -130,7 +130,7 @@ namespace Assignment2
             //renderModelSystem.Draw(gameTime);
             playerRenderSystem.Update(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
-            //humanoid.DrawLimb(gameTime, world);
+            humanoid.DrawLimb(gameTime, world);
             base.Draw(gameTime);
         }
         private void CreateEntities()

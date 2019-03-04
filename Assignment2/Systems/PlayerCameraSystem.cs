@@ -23,11 +23,11 @@ namespace Assignment2.Systems
             var cameraComponents = ComponentManager.Get.GetComponents<CameraComponent>();
             foreach (CameraComponent cameraComp in cameraComponents.Values)
             {
-                Vector3 cameraPosition = human.humWorld.Translation + human.humWorld.Backward * 40f;
+                Vector3 cameraPosition = human.humWorld.Translation + human.humWorld.Backward * 10f;
                 Vector3 cameraLookAt = human.humWorld.Translation;
 
                 cameraComp.View = Matrix.CreateLookAt(cameraPosition, cameraLookAt, Vector3.Up);
-
+                cameraComp.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, cameraComp.AspectRatio, cameraComp.Near, cameraComp.Far);
 
             }
         }
