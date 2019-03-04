@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _3D_Rendering_and_Transformation.Components;
+using _3D_Rendering_and_Transformation.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -27,21 +29,26 @@ namespace Assignment2.HumanModel
 
         public override void DrawLimb(GameTime gameTime, Matrix world)
         {
-            limbWorld = Matrix.CreateScale(scale) * humWorld * Matrix.CreateTranslation(position);
-            effect.World = limbWorld * world;
 
-
-            game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
-            game.GraphicsDevice.Indices = indexBuffer;
-
-
-            //effect.View = Matrix.CreateLookAt(camPosition, jointPosition, Vector3.Up);
-            //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, game.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
-
-            foreach (EffectPass ep in effect.CurrentTechnique.Passes)
+            foreach (CameraComponent cameraComp in ComponentManager.Get.GetComponents<CameraComponent>().Values)
             {
-                ep.Apply();
-                game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, indexBuffer.IndexCount / 3);
+                limbWorld = Matrix.CreateScale(scale) * humWorld * Matrix.CreateTranslation(position);
+                effect.World = limbWorld * world;
+
+
+                game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
+                game.GraphicsDevice.Indices = indexBuffer;
+
+                cameraComp.CamTarget = jointPosition;
+
+                effect.View = cameraComp.View;
+                effect.Projection = cameraComp.Projection;
+
+                foreach (EffectPass ep in effect.CurrentTechnique.Passes)
+                {
+                    ep.Apply();
+                    game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, indexBuffer.IndexCount / 3);
+                }
             }
         }
 

@@ -128,7 +128,7 @@ namespace Assignment2
 
             // TODO: Add your drawing code here
             //renderModelSystem.Draw(gameTime);
-            playerRenderSystem.Update(gameTime);
+            //playerRenderSystem.Update(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
             humanoid.DrawLimb(gameTime, world);
             base.Draw(gameTime);
