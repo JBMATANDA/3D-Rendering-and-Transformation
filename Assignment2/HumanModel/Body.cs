@@ -28,10 +28,9 @@ namespace Assignment2.HumanModel
 
             
             scale = new Vector3(3, 5, 3);
-            parentPosition = Vector3.Zero;
            
 
-            humanoid.Add(new Head(game, new Vector3(0, 4.8f, 0)));
+            humanoid.Add(new Head(game, new Vector3(0, 4.8f,0)));
             humanoid.Add(new RightArm(game, new Vector3(2.2f, 1.5f, 0)));
             humanoid.Add(new LeftArm(game, new Vector3(-2.2f, 1.5f, 0)));
             humanoid.Add(new RightLeg(game, new Vector3(0.8f, -3.8f, 0)));
@@ -50,6 +49,7 @@ namespace Assignment2.HumanModel
                 game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
                 game.GraphicsDevice.Indices = indexBuffer;
 
+                cameraComp.CamTarget = parentPosition;
                 effect.View = cameraComp.View;
                 effect.Projection = cameraComp.Projection;
 
@@ -69,6 +69,9 @@ namespace Assignment2.HumanModel
         public override void UpdateLimb(GameTime gameTime)
         {
             // Here is where the parent and the children sets in motion.
+            Quaternion rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
+            rotation.Normalize();
+
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 parentRotation = new Vector3(parentRotation.X - 0.05f, parentRotation.Y, parentRotation.Z);
@@ -81,12 +84,12 @@ namespace Assignment2.HumanModel
 
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                parentPosition.Z -= 0.05f;
+                rotation.Z -= 0.05f;
             }
 
              if(Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                parentPosition.Z += 0.05f;
+                rotation.Z += 0.05f;
             }
 
 
@@ -110,8 +113,7 @@ namespace Assignment2.HumanModel
                     parentRotation.X -= 0.05f;
                 }
             }
-            Quaternion rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
-            
+
 
 
             humWorld = Matrix.Identity *
