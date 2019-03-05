@@ -18,6 +18,7 @@ namespace Assignment2.HumanModel
         public Vector3 parentPosition = Vector3.Zero;
         public Vector3 parentRotation;
         private Vector3 cameraPosition;
+        private Vector3 forward = Vector3.Forward;
 
         public Matrix limbWorld;
 
@@ -69,7 +70,7 @@ namespace Assignment2.HumanModel
         {
             // Here is where the parent and the children sets in motion.
             Quaternion rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
-            rotation.Normalize();
+
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
@@ -79,16 +80,18 @@ namespace Assignment2.HumanModel
                 {
                     parentRotation.X += 0.05f;
                 }
+
+                forward.Normalize();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                parentPosition.Z  -= 1.05f;
+                parentPosition  += forward * 1.05f;
             }
 
              if(Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                parentPosition = new Vector3(parentPosition.X, parentPosition.Y, parentPosition.Z + 0.05f);
+                parentPosition -= forward * 1.05f;
             }
 
 
@@ -110,10 +113,11 @@ namespace Assignment2.HumanModel
                 if (parentRotation.X >= 1.55f)
                 {
                     parentRotation.X -= 0.05f;
+                    
                 }
+                
             }
-            rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
-            rotation.Normalize();
+            
 
 
             humWorld = Matrix.Identity * 
