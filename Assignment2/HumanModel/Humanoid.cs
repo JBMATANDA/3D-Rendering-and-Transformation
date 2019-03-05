@@ -57,8 +57,6 @@ namespace Assignment2.HumanModel
 
             texture = game.Content.Load<Texture2D>("quikscopeobama");
            
-
-            humWorld = Matrix.Identity;
             SetupVertices();
             SetupVertexBuffer();
             SetupIndices();

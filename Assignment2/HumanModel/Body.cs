@@ -13,9 +13,9 @@ namespace Assignment2.HumanModel
 {
     public class Body : Humanoid
     {
-        public List<Humanoid> humanoid = new List<Humanoid>();
+        public List<IHumanoid> humanoid = new List<IHumanoid>();
         private Game game;
-        public Vector3 parentPosition;
+        public Vector3 parentPosition = Vector3.Zero;
         public Vector3 parentRotation;
         private Vector3 cameraPosition;
 
@@ -28,8 +28,8 @@ namespace Assignment2.HumanModel
 
             
             scale = new Vector3(3, 5, 3);
-           
 
+            parentPosition = humWorld.Translation;
             humanoid.Add(new Head(game, new Vector3(0, 4.8f,0)));
             humanoid.Add(new RightArm(game, new Vector3(2.2f, 1.5f, 0)));
             humanoid.Add(new LeftArm(game, new Vector3(-2.2f, 1.5f, 0)));
@@ -42,8 +42,7 @@ namespace Assignment2.HumanModel
 
             foreach (CameraComponent cameraComp in ComponentManager.Get.GetComponents<CameraComponent>().Values)
             {
-
-                limbWorld = Matrix.CreateScale(scale) * humWorld * Matrix.CreateTranslation(parentPosition);
+                limbWorld = Matrix.CreateScale(scale) * humWorld; 
                 effect.World = limbWorld * world;
 
                 game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
@@ -84,12 +83,12 @@ namespace Assignment2.HumanModel
 
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                rotation.Z -= 0.05f;
+                parentPosition.Z  -= 1.05f;
             }
 
              if(Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                rotation.Z += 0.05f;
+                parentPosition = new Vector3(parentPosition.X, parentPosition.Y, parentPosition.Z + 0.05f);
             }
 
 
@@ -101,7 +100,7 @@ namespace Assignment2.HumanModel
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                parentPosition.Y -= 0.05f;
+                parentPosition.Y -= 1.05f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -113,11 +112,12 @@ namespace Assignment2.HumanModel
                     parentRotation.X -= 0.05f;
                 }
             }
+            rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
+            rotation.Normalize();
 
 
-
-            humWorld = Matrix.Identity *
-                Matrix.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z)) *
+            humWorld = Matrix.Identity * 
+                Matrix.CreateFromQuaternion(rotation) *
                 Matrix.CreateTranslation(parentPosition);
 
 
