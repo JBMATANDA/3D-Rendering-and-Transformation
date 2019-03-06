@@ -16,9 +16,11 @@ namespace Assignment2.HumanModel
         public List<IHumanoid> humanoid = new List<IHumanoid>();
         private Game game;
         public Vector3 parentPosition = Vector3.Zero;
-        public Vector3 parentRotation;
-        private Vector3 cameraPosition;
-        private Vector3 forward = Vector3.Forward;
+        public Vector3 parentRotation = Vector3.Zero;
+        private Vector3 forward;
+        private Matrix modelRotation;
+        private Vector3 direction;
+        
 
         public Matrix limbWorld;
 
@@ -26,11 +28,12 @@ namespace Assignment2.HumanModel
         {
             Load();
             this.game = game;
-
             
-            scale = new Vector3(3, 5, 3);
-
             parentPosition = humWorld.Translation;
+
+            direction = Vector3.Forward;
+
+            scale = new Vector3(3, 5, 3);
             humanoid.Add(new Head(game, new Vector3(0, 4.8f,0)));
             humanoid.Add(new RightArm(game, new Vector3(2.2f, 1.5f, 0)));
             humanoid.Add(new LeftArm(game, new Vector3(-2.2f, 1.5f, 0)));
@@ -48,6 +51,9 @@ namespace Assignment2.HumanModel
 
                 game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
                 game.GraphicsDevice.Indices = indexBuffer;
+
+                direction = cameraComp.View.Backward;
+                direction.Normalize();
 
                 cameraComp.CamTarget = parentPosition;
                 effect.View = cameraComp.View;
@@ -68,64 +74,47 @@ namespace Assignment2.HumanModel
 
         public override void UpdateLimb(GameTime gameTime)
         {
-            // Here is where the parent and the children sets in motion.
-            Quaternion rotation = Quaternion.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
-
+            var rotationMatrix = Matrix.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 parentRotation = new Vector3(parentRotation.X - 0.05f, parentRotation.Y, parentRotation.Z);
-
-                if (parentRotation.X <= -1.55f)
-                {
-                    parentRotation.X += 0.05f;
-                }
-
-                forward.Normalize();
+                
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                parentPosition  += forward * 1.05f;
+                parentPosition  += Vector3.Transform(Vector3.Forward, rotationMatrix);
+
             }
 
-             if(Keyboard.GetState().IsKeyDown(Keys.S))
+            if(Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                parentPosition -= forward * 1.05f;
+                parentPosition += Vector3.Transform(Vector3.Backward, rotationMatrix);
             }
 
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                parentPosition.Y += 0.05f;
+                parentPosition += Vector3.Transform(Vector3.Up, rotationMatrix);
             }
-
-
+            
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                parentPosition.Y -= 1.05f;
+                parentPosition += Vector3.Transform(Vector3.Down, rotationMatrix);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 parentRotation = new Vector3(parentRotation.X + 0.05f, parentRotation.Y, parentRotation.Z);
-
-                if (parentRotation.X >= 1.55f)
-                {
-                    parentRotation.X -= 0.05f;
-                    
-                }
-                
             }
-            
-
 
             humWorld = Matrix.Identity * 
-                Matrix.CreateFromQuaternion(rotation) *
-                Matrix.CreateTranslation(parentPosition);
+                rotationMatrix
+                * Matrix.CreateTranslation(parentPosition);
 
-
-            // Here is where all the children are updated
+           
             foreach (IHumanoid child in humanoid)
             {
                 child.UpdateLimb(gameTime);
