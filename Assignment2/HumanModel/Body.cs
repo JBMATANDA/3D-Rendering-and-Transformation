@@ -16,11 +16,7 @@ namespace Assignment2.HumanModel
         public List<IHumanoid> humanoid = new List<IHumanoid>();
         private Game game;
         public Vector3 parentPosition = Vector3.Zero;
-        public Vector3 parentRotation = Vector3.Zero;
-        private Vector3 forward;
-        private Matrix modelRotation;
-        private Vector3 direction;
-        
+        public Vector3 parentRotation = Vector3.Zero;        
 
         public Matrix limbWorld;
 
@@ -29,10 +25,7 @@ namespace Assignment2.HumanModel
             Load();
             this.game = game;
             
-            parentPosition = humWorld.Translation;
-
-            direction = Vector3.Forward;
-
+        
             scale = new Vector3(3, 5, 3);
             humanoid.Add(new Head(game, new Vector3(0, 4.8f,0)));
             humanoid.Add(new RightArm(game, new Vector3(2.2f, 1.5f, 0)));
@@ -51,9 +44,6 @@ namespace Assignment2.HumanModel
 
                 game.GraphicsDevice.SetVertexBuffer(vertexBuffer);
                 game.GraphicsDevice.Indices = indexBuffer;
-
-                direction = cameraComp.View.Backward;
-                direction.Normalize();
 
                 cameraComp.CamTarget = parentPosition;
                 effect.View = cameraComp.View;
