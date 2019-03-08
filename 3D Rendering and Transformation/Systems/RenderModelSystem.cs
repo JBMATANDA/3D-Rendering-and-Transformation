@@ -22,7 +22,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             {
                 var modelComp = modelComponent.Value as ModelComponent;
                 var transformation = ComponentManager.Get.EntityComponent<TransformComponent>(modelComponent.Key);
-                var camera = ComponentManager.Get.EntityComponent<CameraComponent>(modelComponent.Key);
+                var camera = ComponentManager.Get.EntityComponent<CameraComponent>(0);
 
                 foreach (ModelMesh mesh in modelComp.Model.Meshes)
                 {

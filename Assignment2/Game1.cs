@@ -6,6 +6,7 @@ using _3D_Rendering_and_Transformation.Managers;
 using _3D_Rendering_and_Transformation.Systems;
 using Assignment2.HumanModel;
 using Assignment2.Systems;
+using System;
 
 namespace Assignment2
 {
@@ -22,7 +23,7 @@ namespace Assignment2
         private TransformSystem transformSystem;
         private HeightMapSystem heightMapSystem;
         Texture2D heightMap;
-        Model model1;
+        Model model2;
         BasicEffect bEffect;
         
         Vector3 position;
@@ -31,10 +32,12 @@ namespace Assignment2
         private Matrix world;
         private Body humanoid;
         private Texture2D texture;
+        private Model model1;
         private Vector3 humanoidPosition;
         private Effect effect;
         private PlayerCameraSystem playerCameraSystem;
         private PlayerRenderSystem playerRenderSystem;
+        private Model model;
 
         public Game1()
         {
@@ -60,12 +63,8 @@ namespace Assignment2
         {
             // TODO: Add your initialization logic here
 
-            humanoid = new Body(this);
 
-            playerCameraSystem = new PlayerCameraSystem(humanoid);
-            playerRenderSystem = new PlayerRenderSystem(humanoid.effect);
             world = Matrix.Identity;
-            humanoid.parentPosition = humanoidPosition;
             base.Initialize();
         }
 
@@ -82,11 +81,18 @@ namespace Assignment2
             bEffect = new BasicEffect(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             texture = Content.Load<Texture2D>("quikscopeobama");
-            
+            model1 = Content.Load<Model>("Tree");
+            model2 = Content.Load<Model>("tree01");
+
 
             CreateEntities();
-            
+            CreateRandomEntities();
+
             heightMapSystem.SetUpHeightMap(this, heightMap);
+            humanoid = new Body(this);
+
+            playerCameraSystem = new PlayerCameraSystem(humanoid);
+            //playerRenderSystem = new PlayerRenderSystem(humanoid.effect);
 
             // TODO: use this.Content to load your game content here
         }
@@ -112,6 +118,7 @@ namespace Assignment2
             //cameraSystem.Update(graphics, gameTime);
             playerCameraSystem.Update(gameTime);
             humanoid.UpdateLimb(gameTime);
+            transformSystem.Update(gameTime);
             // TODO: Add your update logic here
 
             //transformSystem.Update(gameTime);
@@ -127,7 +134,7 @@ namespace Assignment2
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            //renderModelSystem.Draw(gameTime);
+            renderModelSystem.Draw(gameTime);
             //playerRenderSystem.Update(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
             humanoid.DrawLimb(gameTime, world);
@@ -136,11 +143,35 @@ namespace Assignment2
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { View = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up), AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
             ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
-            ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model1 }, id);
-            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1000, Height = 500 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model2 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1081, Height = 1081 }, id);
 
+        }
+
+        private void CreateRandomEntities()
+        {
+            Random r = new Random();
+
+
+            for (int i = 0; i < 100; i++)
+            {
+                int modelInt = r.Next(0, 1);
+
+                if (modelInt == 0)
+                {
+                    model = model1;
+                }
+                else { model = model2; }
+
+                int randomX = r.Next(0, 1081);
+                int randomZ = r.Next(0, 1081);
+
+                var id = ComponentManager.Get.NewEntity();
+                ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model }, id);
+                ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = new Vector3(randomX, 0, randomZ), Axis = axis }, id);
+            }
         }
     }
 }

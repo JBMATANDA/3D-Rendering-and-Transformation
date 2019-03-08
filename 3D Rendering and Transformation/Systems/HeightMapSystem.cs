@@ -32,6 +32,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             //SetupVertexBuffer(game);
             SetUpIndices();
             //SetupIndexBuffer(game);
+            GetHeightMapData();
         }
 
         public void SetupVertexBuffer(Game game)
@@ -97,7 +98,14 @@ namespace _3D_Rendering_and_Transformation.Systems
                 }
             }
         }
-
+        public void GetHeightMapData()
+        {
+            foreach (HeightMapComponent heightMap in ComponentManager.Get.GetComponents<HeightMapComponent>().Values)
+            {
+                heightMap.heightData = heightData;
+                
+            }
+        } 
         public void LoadHeightData(Texture2D heightMap)
         {
             float minimumHeight = float.MaxValue;

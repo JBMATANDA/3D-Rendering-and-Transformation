@@ -19,12 +19,13 @@ namespace Assignment2.HumanModel
         public Vector3 parentRotation = Vector3.Zero;        
 
         public Matrix limbWorld;
+        private float[,] heightMap;
 
         public Body(Game game) : base(game, "body")
         {
             Load();
             this.game = game;
-            
+            parentPosition.Y = 100f;
         
             scale = new Vector3(3, 5, 3);
             humanoid.Add(new Head(game, new Vector3(0, 4.8f,0)));
@@ -64,53 +65,65 @@ namespace Assignment2.HumanModel
 
         public override void UpdateLimb(GameTime gameTime)
         {
-            var rotationMatrix = Matrix.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            foreach (HeightMapComponent heightMap in ComponentManager.Get.GetComponents<HeightMapComponent>().Values)
             {
-                parentRotation = new Vector3(parentRotation.X - 0.05f, parentRotation.Y, parentRotation.Z);
-                
+                var rotationMatrix = Matrix.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
+
+                parentPosition.Y -= 1f;
+
+                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                {
+                    parentRotation = new Vector3(parentRotation.X - 0.05f, parentRotation.Y, parentRotation.Z);
+
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                {
+                    parentPosition += Vector3.Transform(Vector3.Forward, rotationMatrix);
+
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                {
+                    parentPosition += Vector3.Transform(Vector3.Backward, rotationMatrix);
+                }
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    parentPosition += Vector3.Transform(Vector3.Up, rotationMatrix);
+                }
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    parentPosition += Vector3.Transform(Vector3.Down, rotationMatrix);
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                {
+                    parentRotation = new Vector3(parentRotation.X + 0.05f, parentRotation.Y, parentRotation.Z);
+                }
+
+                var y = heightMap.heightData[Math.Abs((int)parentPosition.X), Math.Abs((int)parentPosition.Z)];
+
+                if (parentPosition.Y < y)
+                {
+                    parentPosition.Y = y - 200;
+                }
+
+                humWorld = Matrix.Identity *
+                    rotationMatrix
+                    * Matrix.CreateTranslation(parentPosition);
+
+
+                foreach (IHumanoid child in humanoid)
+                {
+                    child.UpdateLimb(gameTime);
+                }
+
+
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
-            {
-                parentPosition  += Vector3.Transform(Vector3.Forward, rotationMatrix);
-
-            }
-
-            if(Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                parentPosition += Vector3.Transform(Vector3.Backward, rotationMatrix);
-            }
-
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                parentPosition += Vector3.Transform(Vector3.Up, rotationMatrix);
-            }
-            
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                parentPosition += Vector3.Transform(Vector3.Down, rotationMatrix);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                parentRotation = new Vector3(parentRotation.X + 0.05f, parentRotation.Y, parentRotation.Z);
-            }
-
-            humWorld = Matrix.Identity * 
-                rotationMatrix
-                * Matrix.CreateTranslation(parentPosition);
-
-           
-            foreach (IHumanoid child in humanoid)
-            {
-                child.UpdateLimb(gameTime);
-            }
-
-
         }
     }
 }

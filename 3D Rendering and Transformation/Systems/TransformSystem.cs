@@ -23,7 +23,7 @@ namespace _3D_Rendering_and_Transformation.Systems
 
                 var modelComp = modelComponent.Value as ModelComponent;
                 var transform = ComponentManager.Get.EntityComponent<TransformComponent>(modelComponent.Key);
-                var camera = ComponentManager.Get.EntityComponent<CameraComponent>(modelComponent.Key);
+                var camera = ComponentManager.Get.EntityComponent<CameraComponent>(0);
 
                 var rotationSpeed = 0.01f;
                 var elapsedGameTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -34,7 +34,7 @@ namespace _3D_Rendering_and_Transformation.Systems
                 var axis = Vector3.Up;
                 Quaternion rot = Quaternion.CreateFromAxisAngle(axis, angle);
                 rot.Normalize();
-                modelComp.Model.Bones[1].Transform *= Matrix.CreateFromQuaternion(rot);
+                //modelComp.Model.Bones[1].Transform *= Matrix.CreateFromQuaternion(rot);
 
                 
 
@@ -42,30 +42,31 @@ namespace _3D_Rendering_and_Transformation.Systems
                 var axis2 = Vector3.Left;
                 Quaternion rot2 = Quaternion.CreateFromAxisAngle(axis2, angle);
                 rot2.Normalize();
-                modelComp.Model.Bones[3].Transform *= Matrix.CreateTranslation(-modelComp.Model.Bones[3].Transform.Translation)
-                    * Matrix.CreateFromQuaternion(rot2)
-                    * Matrix.CreateTranslation(modelComp.Model.Bones[3].Transform.Translation);
+
+                //modelComp.Model.Bones[3].Transform *= Matrix.CreateTranslation(-modelComp.Model.Bones[3].Transform.Translation)
+                    //* Matrix.CreateFromQuaternion(rot2)
+                    //* Matrix.CreateTranslation(modelComp.Model.Bones[3].Transform.Translation);
 
 
-                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
                     //Forward
                     transform.Position.Z += -1f;
                     camera.CamPosition.Z += -1f;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     //Left
                     transform.Position.X += -1f;
                     camera.CamPosition.X += -1f;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
                     //Backward
                     transform.Position.Z += 1f;
                     camera.CamPosition.Z += 1f;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
                     //Right
                     transform.Position.X += 1f;
