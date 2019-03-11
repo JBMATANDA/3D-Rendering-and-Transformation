@@ -7,6 +7,7 @@ using _3D_Rendering_and_Transformation.Systems;
 using Assignment2.HumanModel;
 using Assignment2.Systems;
 using System;
+using System.Collections.Generic;
 
 namespace Assignment2
 {
@@ -17,27 +18,25 @@ namespace Assignment2
     {
         GraphicsDeviceManager graphics;
         //SpriteBatch spriteBatch;
-        GraphicsDevice device;
         private CameraSystem cameraSystem;
         private RenderModelSystem renderModelSystem;
         private TransformSystem transformSystem;
         private HeightMapSystem heightMapSystem;
         Texture2D heightMap;
         Model model2;
+        private Matrix view;
+        private Matrix projection;
         BasicEffect bEffect;
         
-        Vector3 position;
-        // Quaternion rotation;
-        Vector3 axis;
         private Matrix world;
         private Body humanoid;
         private Texture2D texture;
         private Model model1;
-        private Vector3 humanoidPosition;
         private Effect effect;
         private PlayerCameraSystem playerCameraSystem;
-        private PlayerRenderSystem playerRenderSystem;
         private Model model;
+        private List<Vector3> modelPositions;
+        private List<Models> trees;
 
         public Game1()
         {
@@ -84,14 +83,19 @@ namespace Assignment2
             model1 = Content.Load<Model>("Tree");
             model2 = Content.Load<Model>("tree01");
 
+            view = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+
 
             CreateEntities();
-            CreateRandomEntities();
 
             heightMapSystem.SetUpHeightMap(this, heightMap);
             humanoid = new Body(this);
 
             playerCameraSystem = new PlayerCameraSystem(humanoid);
+
+            CreateRandomEntities();
+
             //playerRenderSystem = new PlayerRenderSystem(humanoid.effect);
 
             // TODO: use this.Content to load your game content here
@@ -116,11 +120,12 @@ namespace Assignment2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             //cameraSystem.Update(graphics, gameTime);
+            
             playerCameraSystem.Update(gameTime);
             humanoid.UpdateLimb(gameTime);
             transformSystem.Update(gameTime);
             // TODO: Add your update logic here
-
+            UpdateModels(trees, gameTime);
             //transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
@@ -138,14 +143,15 @@ namespace Assignment2
             //playerRenderSystem.Update(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
             humanoid.DrawLimb(gameTime, world);
+            DrawModels(trees);
             base.Draw(gameTime);
         }
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { View = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up), AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
-            ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
-            ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model2 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { View = view, AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
+            //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
+            //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model2 }, id);
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1081, Height = 1081 }, id);
 
         }
@@ -155,22 +161,95 @@ namespace Assignment2
             Random r = new Random();
 
 
+
+
+            var heightMap = ComponentManager.Get.EntityComponent<HeightMapComponent>(0);
+            
+            modelPositions = GeneratePositions(heightMap.heightData, 100);
+
             for (int i = 0; i < 100; i++)
             {
                 int modelInt = r.Next(0, 1);
-
+            
                 if (modelInt == 0)
                 {
                     model = model1;
                 }
                 else { model = model2; }
 
+                trees = CreateTrees(model, 100);
+
                 int randomX = r.Next(0, 1081);
                 int randomZ = r.Next(0, 1081);
-
+                
+            
                 var id = ComponentManager.Get.NewEntity();
-                ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model }, id);
-                ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = new Vector3(randomX, 0, randomZ), Axis = axis }, id);
+                //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model }, id);
+                //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = new Vector3(modelPositions[i].X, modelPositions[i].Y - 200, modelPositions[i].Z), Scale = new Vector3(1, 1, 1) }, id);
+                
+            }
+            ComponentManager.Get.PrintComponents();
+        }
+
+
+        private List<Models> CreateTrees(Model treeModel, int nModels)
+        {
+            var heightMap = ComponentManager.Get.EntityComponent<HeightMapComponent>(0);
+
+            List<Models> trees = new List<Models>();
+            modelPositions = GeneratePositions(heightMap.heightData, nModels);
+            trees.Add(new Models(model, modelPositions[0], texture));
+            for (int i = 1; i < nModels; i++)
+            {
+                var tree = new Models(treeModel, modelPositions[i], texture);
+                trees.Add(tree);
+            }
+
+            return trees;
+        }
+
+        private List<Vector3> GeneratePositions(float[,] heightmapData, int nPositions)
+        {
+            List<Vector3> positions = new List<Vector3>();
+
+            Random rnd = new Random();
+            int x = 2;
+            int z = 2;
+            for (int i = 0; i < nPositions; i++)
+            {
+                x = rnd.Next(x / 2, x + 5);
+                z = rnd.Next(z / 2, z + 5);
+                var y = heightmapData[Math.Abs(x), Math.Abs(z)];
+                positions.Add(new Vector3(x, y, -z));
+                x += 50;
+                z += 50;
+                Console.WriteLine(x.ToString() + " " + z.ToString());
+            }
+
+            return positions;
+        }
+
+        public void DrawModels(List<Models> models)
+        {
+
+            foreach (CameraComponent cameraComponent in ComponentManager.Get.GetComponents<CameraComponent>().Values)
+            {
+                foreach (Models model in models)
+                {
+                    model.Draw(cameraComponent.View, cameraComponent.Projection);
+                }
+            }
+        }
+
+        public void UpdateModels(List<Models> models, GameTime gameTime)
+        {
+
+            foreach (CameraComponent cameraComponent in ComponentManager.Get.GetComponents<CameraComponent>().Values)
+            {
+                foreach (Models model in models)
+                {
+                    model.Update(gameTime);
+                }
             }
         }
     }

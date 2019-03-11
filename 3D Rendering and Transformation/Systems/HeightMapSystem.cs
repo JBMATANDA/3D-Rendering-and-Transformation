@@ -164,6 +164,8 @@ namespace _3D_Rendering_and_Transformation.Systems
                 device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices, 0, vertices.Length, indices, 0, indices.Length / 3, VertexPositionNormalTexture.VertexDeclaration);
             }
 
+
         }
+
     }
 }

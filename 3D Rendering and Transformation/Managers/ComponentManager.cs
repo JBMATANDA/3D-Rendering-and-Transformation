@@ -10,7 +10,7 @@ namespace _3D_Rendering_and_Transformation.Managers
     public class ComponentManager
     {
         private static ComponentManager cm;
-        private uint nextid;
+        private static uint nextid;
         private Dictionary<Type, Dictionary<uint, IComponent>> Components = new Dictionary<Type, Dictionary<uint, IComponent>>();
 
         internal object EntityComponent<T>(object key)
@@ -79,5 +79,14 @@ namespace _3D_Rendering_and_Transformation.Managers
         {
             Components.Clear();
         }
+
+        public void PrintComponents()
+        {
+            foreach(var comp in Components.Values)
+            {
+                Console.WriteLine(comp.ToString());
+            }
+
+    }
     }
 }

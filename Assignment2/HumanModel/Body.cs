@@ -69,7 +69,7 @@ namespace Assignment2.HumanModel
             {
                 var rotationMatrix = Matrix.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
 
-                parentPosition.Y -= 1f;
+                //parentPosition.Y -= 1f;
 
                 if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {

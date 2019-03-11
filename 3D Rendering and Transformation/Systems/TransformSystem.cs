@@ -77,13 +77,16 @@ namespace _3D_Rendering_and_Transformation.Systems
                 transform.Rotation *= Matrix.CreateFromQuaternion(rotation);
 
                 camera.CamTarget = transform.Rotation.Forward;
+                modelComp.Model.Bones[0].Transform *=
 
-                modelComp.Model.Bones[0].Transform *= Matrix.CreateTranslation(-modelComp.Model.Bones[0].Transform.Translation)
+                    Matrix.CreateScale(transform.Scale)
+                    * Matrix.CreateTranslation(-modelComp.Model.Bones[0].Transform.Translation)
                     * Matrix.CreateFromQuaternion(rotation)
                     * Matrix.CreateTranslation(modelComp.Model.Bones[0].Transform.Translation);
 
                 camera.World = //Matrix.CreateRotationY(angle) * 
-                    Matrix.CreateTranslation(transform.Position);
+                    Matrix.CreateScale(0.3f)
+                    * Matrix.CreateTranslation(transform.Position);
             }
 
         }
