@@ -25,7 +25,7 @@ namespace Assignment2.HumanModel
         {
             Load();
             this.game = game;
-            parentPosition.Y = 100f;
+            parentPosition.Y = -100f;
         
             scale = new Vector3(3, 5, 3);
             humanoid.Add(new Head(game, new Vector3(0, 4.8f,0)));
@@ -69,7 +69,7 @@ namespace Assignment2.HumanModel
             {
                 var rotationMatrix = Matrix.CreateFromYawPitchRoll(parentRotation.X, parentRotation.Y, parentRotation.Z);
 
-                //parentPosition.Y -= 1f;
+                parentPosition.Y -= 1f;
 
                 if (Keyboard.GetState().IsKeyDown(Keys.D))
                 {
@@ -109,7 +109,7 @@ namespace Assignment2.HumanModel
 
                 if (parentPosition.Y < y)
                 {
-                    parentPosition.Y = y - 200;
+                    parentPosition.Y = y - 250;
                 }
 
                 humWorld = Matrix.Identity *

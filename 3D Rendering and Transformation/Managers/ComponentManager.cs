@@ -71,8 +71,9 @@ namespace _3D_Rendering_and_Transformation.Managers
             {
                 Components.Add(component.GetType(), new Dictionary<uint, IComponent>());
             }
-            var components = Components[component.GetType()];
-            components.Add(id, component);
+            //var components = 
+                Components[component.GetType()].Add(id, component);
+                //components.Add(id, component);
         }
 
         public void ClearComponents()

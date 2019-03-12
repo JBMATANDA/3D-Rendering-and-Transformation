@@ -48,30 +48,30 @@ namespace _3D_Rendering_and_Transformation.Systems
                     //* Matrix.CreateTranslation(modelComp.Model.Bones[3].Transform.Translation);
 
 
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                {
-                    //Forward
-                    transform.Position.Z += -1f;
-                    camera.CamPosition.Z += -1f;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                {
-                    //Left
-                    transform.Position.X += -1f;
-                    camera.CamPosition.X += -1f;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                {
-                    //Backward
-                    transform.Position.Z += 1f;
-                    camera.CamPosition.Z += 1f;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                {
-                    //Right
-                    transform.Position.X += 1f;
-                    camera.CamPosition.X += 1f;
-                }
+                //if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                //{
+                //    //Forward
+                //    transform.Position.Z += -1f;
+                //    camera.CamPosition.Z += -1f;
+                //}
+                //if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                //{
+                //    //Left
+                //    transform.Position.X += -1f;
+                //    camera.CamPosition.X += -1f;
+                //}
+                //if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                //{
+                //    //Backward
+                //    transform.Position.Z += 1f;
+                //    camera.CamPosition.Z += 1f;
+                //}
+                //if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                //{
+                //    //Right
+                //    transform.Position.X += 1f;
+                //    camera.CamPosition.X += 1f;
+                //}
                 Quaternion rotation = Quaternion.CreateFromAxisAngle(transform.Axis, angle);
                 rotation.Normalize();
                 transform.Rotation *= Matrix.CreateFromQuaternion(rotation);

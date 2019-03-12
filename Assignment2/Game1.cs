@@ -175,15 +175,15 @@ namespace Assignment2
                 {
                     model = model1;
                 }
-                else { model = model2; }
+                else if(modelInt == 0 ) { model = model2; }
 
-                trees = CreateTrees(model, 100);
+                trees = CreateTrees(model1, 100);
 
                 int randomX = r.Next(0, 1081);
                 int randomZ = r.Next(0, 1081);
                 
             
-                var id = ComponentManager.Get.NewEntity();
+                //var id = ComponentManager.Get.NewEntity();
                 //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model }, id);
                 //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = new Vector3(modelPositions[i].X, modelPositions[i].Y - 200, modelPositions[i].Z), Scale = new Vector3(1, 1, 1) }, id);
                 
@@ -220,9 +220,9 @@ namespace Assignment2
                 x = rnd.Next(x / 2, x + 5);
                 z = rnd.Next(z / 2, z + 5);
                 var y = heightmapData[Math.Abs(x), Math.Abs(z)];
-                positions.Add(new Vector3(x, y, -z));
-                x += 50;
-                z += 50;
+                positions.Add(new Vector3(x, y - 240, -z));
+                x += 100;
+                z += 100;
                 Console.WriteLine(x.ToString() + " " + z.ToString());
             }
 

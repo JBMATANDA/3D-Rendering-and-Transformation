@@ -11,8 +11,16 @@ namespace _3D_Rendering_and_Transformation.Systems
     {
         Vector3 axis = Vector3.Zero;
         private Vector3 pos;
+        private BoundingFrustum boundingFrustum;
         private Texture2D texture;
         private float scale = 1.5f;
+        BoundingBox boundingBox;
+        private Vector3 size = new Vector3(1, 1, 1);
+        private float height;
+        private Matrix modelProjection;
+
+        public Matrix modelView;
+
         public Models(Model treeModel, Vector3 pos, Texture2D texture)
         {
             model = treeModel;
@@ -21,11 +29,18 @@ namespace _3D_Rendering_and_Transformation.Systems
             //    Matrix.CreateTranslation(pos);
             this.pos = pos;
 
+            Vector3 min = pos + Vector3.Up * height - size / 2f;
+            Vector3 max = pos + Vector3.Up * height + size / 2f;
+            boundingBox = new BoundingBox(min, max);
+
+            var cameraComp = ComponentManager.Get.EntityComponent<CameraComponent>(0);
+
+            boundingFrustum = new BoundingFrustum(cameraComp.View * cameraComp.Projection);
             this.texture = texture;
         }
         public void Update(GameTime gameTime)
         {
-            var rotationSpeed = 0.01f;
+            var rotationSpeed = 4.5f;
             float elapsedGameTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             var angle = -elapsedGameTime * rotationSpeed;
 
@@ -39,38 +54,39 @@ namespace _3D_Rendering_and_Transformation.Systems
             * Matrix.CreateFromQuaternion(rotation)
             * Matrix.CreateTranslation(model.Bones[0].Transform.Translation);
 
-            worldMatrix = //Matrix.CreateRotationY(angle) * 
-                Matrix.CreateScale(0.3f)
+            worldMatrix = Matrix.CreateRotationX(4.7f) * 
+                Matrix.CreateScale(10f)
                 * Matrix.CreateTranslation(pos);
         }
         public void Draw(Matrix view, Matrix projection)
         {
-
-            //var cameraComp = ComponentManager.Get.EntityComponent<CameraComponent>(0);
-
-            foreach (ModelMesh mesh in model.Meshes)
+            if (boundingFrustum.Intersects(boundingBox))
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                //var cameraComp = ComponentManager.Get.EntityComponent<CameraComponent>(0);
+
+                foreach (ModelMesh mesh in model.Meshes)
                 {
-                    effect.EnableDefaultLighting();
-                    effect.World = worldMatrix;
-                    effect.View = view;
-                    effect.Projection = projection;
-
-                    effect.LightingEnabled = true;
-                    //effect.Texture = texture;
-                    //effect.TextureEnabled = true;
-
-                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                    foreach (BasicEffect effect in mesh.Effects)
                     {
-                        pass.Apply();
+                        effect.EnableDefaultLighting();
+                        effect.World = worldMatrix;
+                        effect.View = view;
+                        effect.Projection = projection;
 
-                        mesh.Draw();
+                        effect.LightingEnabled = true;
+                        //effect.Texture = texture;
+                        //effect.TextureEnabled = true;
+
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+
+                            mesh.Draw();
+                        }
                     }
+
                 }
-
             }
-
         }
     }
 }
