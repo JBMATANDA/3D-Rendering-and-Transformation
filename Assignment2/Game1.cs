@@ -23,7 +23,7 @@ namespace Assignment2
         private TransformSystem transformSystem;
         private HeightMapSystem heightMapSystem;
         Texture2D heightMap;
-        Model model2;
+        private Model model2;
         private Matrix view;
         private Matrix projection;
         BasicEffect bEffect;
@@ -80,7 +80,7 @@ namespace Assignment2
             bEffect = new BasicEffect(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             texture = Content.Load<Texture2D>("quikscopeobama");
-            model1 = Content.Load<Model>("Tree");
+            model1 = Content.Load<Model>("lowpolytree");
             model2 = Content.Load<Model>("tree01");
 
             view = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
@@ -158,50 +158,29 @@ namespace Assignment2
 
         private void CreateRandomEntities()
         {
-            Random r = new Random();
+            Model[] modelArray = new[] { model1, model2 };
 
+            trees = CreateTrees(modelArray, 100);
 
-
-
-            var heightMap = ComponentManager.Get.EntityComponent<HeightMapComponent>(0);
-            
-            modelPositions = GeneratePositions(heightMap.heightData, 100);
-
-            for (int i = 0; i < 100; i++)
-            {
-                int modelInt = r.Next(0, 1);
-            
-                if (modelInt == 0)
-                {
-                    model = model1;
-                }
-                else if(modelInt == 0 ) { model = model2; }
-
-                trees = CreateTrees(model1, 100);
-
-                int randomX = r.Next(0, 1081);
-                int randomZ = r.Next(0, 1081);
-                
-            
-                //var id = ComponentManager.Get.NewEntity();
-                //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model }, id);
-                //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = new Vector3(modelPositions[i].X, modelPositions[i].Y - 200, modelPositions[i].Z), Scale = new Vector3(1, 1, 1) }, id);
-                
-            }
-            ComponentManager.Get.PrintComponents();
         }
 
 
-        private List<Models> CreateTrees(Model treeModel, int nModels)
+        private List<Models> CreateTrees(Model[] modelArray, int nModels)
         {
+
+            Random r = new Random();
+            int randomIndex = r.Next(modelArray.Length);
+            Model randomModel = modelArray[randomIndex];
             var heightMap = ComponentManager.Get.EntityComponent<HeightMapComponent>(0);
 
             List<Models> trees = new List<Models>();
             modelPositions = GeneratePositions(heightMap.heightData, nModels);
-            trees.Add(new Models(model, modelPositions[0], texture));
+            trees.Add(new Models(randomModel, modelPositions[0], texture));
             for (int i = 1; i < nModels; i++)
             {
-                var tree = new Models(treeModel, modelPositions[i], texture);
+                randomIndex = r.Next(modelArray.Length);
+                randomModel = modelArray[randomIndex];
+                var tree = new Models(randomModel, modelPositions[i], texture);
                 trees.Add(tree);
             }
 
