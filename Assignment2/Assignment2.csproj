@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\IModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shader\Shader.cs" />
     <Compile Include="Systems\AbstractModel.cs" />
     <Compile Include="Systems\Models.cs" />
     <Compile Include="Systems\PlayerCameraSystem.cs" />

@@ -54,7 +54,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             * Matrix.CreateFromQuaternion(rotation)
             * Matrix.CreateTranslation(model.Bones[0].Transform.Translation);
 
-            worldMatrix = Matrix.CreateRotationX(4.7f) * 
+            worldMatrix = //Matrix.CreateRotationX(4.7f) * 
                 Matrix.CreateScale(10f)
                 * Matrix.CreateTranslation(pos);
         }

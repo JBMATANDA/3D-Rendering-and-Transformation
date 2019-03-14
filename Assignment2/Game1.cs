@@ -24,6 +24,7 @@ namespace Assignment2
         private HeightMapSystem heightMapSystem;
         Texture2D heightMap;
         private Model model2;
+        private Model model3;
         private Matrix view;
         private Matrix projection;
         BasicEffect bEffect;
@@ -79,8 +80,9 @@ namespace Assignment2
             bEffect = new BasicEffect(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
             texture = Content.Load<Texture2D>("quikscopeobama");
-            model1 = Content.Load<Model>("lowpolytree");
-            model2 = Content.Load<Model>("tree01");
+            model1 = Content.Load<Model>("tree01");
+            model2 = Content.Load<Model>("tree02");
+            model3 = Content.Load<Model>("tree03");
 
             view = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver2, GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
@@ -153,7 +155,7 @@ namespace Assignment2
 
         private void CreateRandomEntities()
         {
-            Model[] modelArray = new[] { model1, model2 };
+            Model[] modelArray = new[] { model1, model2, model3 };
 
             trees = CreateTrees(modelArray, 100);
 
@@ -192,7 +194,7 @@ namespace Assignment2
                 x = rnd.Next(x / 2, x + 5);
                 z = rnd.Next(z / 2, z + 5);
                 var y = heightmapData[Math.Abs(x), Math.Abs(z)];
-                positions.Add(new Vector3(x, y - 240, -z));
+                positions.Add(new Vector3(x, y - 260, -z));
                 x += 100;
                 z += 100;
                 Console.WriteLine(x.ToString() + " " + z.ToString());
