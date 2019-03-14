@@ -169,17 +169,14 @@ namespace Assignment2
         {
 
             Random r = new Random();
-            int randomIndex = r.Next(modelArray.Length);
-            Model randomModel = modelArray[randomIndex];
             var heightMap = ComponentManager.Get.EntityComponent<HeightMapComponent>(0);
 
             List<Models> trees = new List<Models>();
             modelPositions = GeneratePositions(heightMap.heightData, nModels);
-            trees.Add(new Models(randomModel, modelPositions[0], texture));
-            for (int i = 1; i < nModels; i++)
+            for (int i = 0; i < nModels; i++)
             {
-                randomIndex = r.Next(modelArray.Length);
-                randomModel = modelArray[randomIndex];
+                int randomIndex = r.Next(modelArray.Length);
+                Model randomModel = modelArray[randomIndex];
                 var tree = new Models(randomModel, modelPositions[i], texture);
                 trees.Add(tree);
             }
