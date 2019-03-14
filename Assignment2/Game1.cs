@@ -179,6 +179,7 @@ namespace Assignment2
             return trees;
         }
 
+        //Returns a list of vector3 positions for Model position on the heightmap. Takes in the heightmap and the number of positions that will be created.
         private List<Vector3> GeneratePositions(float[,] heightmapData, int nPositions)
         {
             List<Vector3> positions = new List<Vector3>();

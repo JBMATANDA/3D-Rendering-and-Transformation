@@ -119,3 +119,9 @@
 /processorParam:TextureFormat=Compressed
 /build:lowpolytree.fbx
 
+#begin shadow.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shadow.fx
+
