@@ -34,7 +34,6 @@ namespace Assignment2
         private Model model1;
         private Effect effect;
         private PlayerCameraSystem playerCameraSystem;
-        private Model model;
         private List<Vector3> modelPositions;
         private List<Models> trees;
 
@@ -119,14 +118,12 @@ namespace Assignment2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            //cameraSystem.Update(graphics, gameTime);
             
             playerCameraSystem.Update(gameTime);
             humanoid.UpdateLimb(gameTime);
             transformSystem.Update(gameTime);
             // TODO: Add your update logic here
             UpdateModels(trees, gameTime);
-            //transformSystem.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -140,7 +137,6 @@ namespace Assignment2
 
             // TODO: Add your drawing code here
             renderModelSystem.Draw(gameTime);
-            //playerRenderSystem.Update(gameTime);
             heightMapSystem.Draw(gameTime, graphics.GraphicsDevice);
             humanoid.DrawLimb(gameTime, world);
             DrawModels(trees);
@@ -150,8 +146,7 @@ namespace Assignment2
         {
             var id = ComponentManager.Get.NewEntity();
             ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { View = view, AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
-            //ComponentManager.Get.AddComponentsToEntity(new TransformComponent() { Position = position, Axis = axis }, id);
-            //ComponentManager.Get.AddComponentsToEntity(new ModelComponent() { Model = model2 }, id);
+
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1081, Height = 1081 }, id);
 
         }
