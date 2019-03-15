@@ -37,6 +37,8 @@ namespace Assignment2
         private PlayerCameraSystem playerCameraSystem;
         private List<Vector3> modelPositions;
         private List<Models> trees;
+        private int shadowMapWidth;
+        private int shadowMapHeight;
 
         public Game1()
         {
@@ -147,10 +149,45 @@ namespace Assignment2
         private void CreateEntities()
         {
             var id = ComponentManager.Get.NewEntity();
-            ComponentManager.Get.AddComponentsToEntity(new CameraComponent() { View = view, AspectRatio = GraphicsDevice.Viewport.AspectRatio, Near = 0.1f, Far = 1000.0f }, id);
+            ComponentManager.Get.AddComponentsToEntity(new CameraComponent()
+            {
+                View = view,
+                AspectRatio = GraphicsDevice.Viewport.AspectRatio,
+                Near = 0.1f,
+                Far = 1000.0f
+            }, id);
 
-            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent() { HeightMap = heightMap, Texture = texture, Effect = effect, Width = 1081, Height = 1081 }, id);
+            ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent()
+            {
+                HeightMap = heightMap,
+                Texture = texture,
+                Effect = effect,
+                Width = 1081,
+                Height = 1081
+            }, id);
 
+            ComponentManager.Get.AddComponentsToEntity(new LightSettingsComponent()
+            {
+
+                LightDirection = new Vector3(-0.3333333f, 0.6666667f, 0.6666667f),
+                DiffusColor = Color.White.ToVector4(),
+                DiffuseIntensity = 0.5f,
+                DiffuseLightDirection = new Vector3(-0.3333333f, 0.6666667f, 0.6666667f),
+                AmbientColor = Color.White.ToVector4(),
+                AmbientIntensity = 0.2f,
+                RenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                //shadowMapWidth
+                5,
+                //shadowMapHeight
+                7,
+                true,
+                SurfaceFormat.Single,
+                DepthFormat.Depth24),
+                FogColor = Color.CornflowerBlue.ToVector4(),
+                FogEnabled = true,
+                FogStart = 80f,
+                FogEnd = 200f
+            }, id);
         }
 
         private void CreateRandomEntities()
