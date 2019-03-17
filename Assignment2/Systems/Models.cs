@@ -72,6 +72,12 @@ namespace _3D_Rendering_and_Transformation.Systems
                         effect.World = worldMatrix;
                         effect.View = view;
                         effect.Projection = projection;
+                        effect.FogEnabled = true;
+                        effect.FogStart = 200.0f;
+                        effect.FogEnd = 10000.0f;
+                        
+
+                        effect.FogColor = new Vector3(100, 149, 237);
 
                         effect.LightingEnabled = true;
                         //effect.Texture = texture;
