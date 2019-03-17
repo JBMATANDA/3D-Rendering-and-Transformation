@@ -153,6 +153,9 @@ namespace _3D_Rendering_and_Transformation.Systems
             heightMapComponent.Effect.Parameters["xProjection"].SetValue(camera.Projection);
             heightMapComponent.Effect.Parameters["xWorld"].SetValue(worldMatrix);
             heightMapComponent.Effect.Parameters["xTexture"].SetValue(heightMapComponent.Texture);
+            heightMapComponent.Effect.Parameters["xLightDirection"].SetValue(new Vector3(0, 0, 0));
+            heightMapComponent.Effect.Parameters["xAmbient"].SetValue(1f);
+
 
             device.SetVertexBuffer(vertexBuffer);
             device.Indices = indexBuffer;
