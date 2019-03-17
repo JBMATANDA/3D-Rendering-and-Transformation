@@ -17,5 +17,11 @@ namespace _3D_Rendering_and_Transformation.Components
         public float Near { get; set; }
         public float Far { get; set; }
         public float AspectRatio { get; set; }
+        public BoundingFrustum BoundingFrustum;
+
+        public void UpdateFrustum()
+        {
+            this.BoundingFrustum.Matrix = this.View * this.Projection;
+        }
     }
 }

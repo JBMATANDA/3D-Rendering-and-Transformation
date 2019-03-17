@@ -39,8 +39,8 @@ namespace Assignment2
         private PlayerCameraSystem playerCameraSystem;
         private List<Vector3> modelPositions;
         private List<Models> trees;
-        private int shadowMapWidth;
-        private int shadowMapHeight;
+        private const int shadowMapWidth = 2048;
+        private const int shadowMapHeight = 2048;
 
         public Game1()
         {
@@ -156,15 +156,17 @@ namespace Assignment2
             ComponentManager.Get.AddComponentsToEntity(new CameraComponent()
             {
                 View = view,
+                Projection = projection,
                 AspectRatio = GraphicsDevice.Viewport.AspectRatio,
                 Near = 0.1f,
-                Far = 1000.0f
+                Far = 1000.0f,
+                BoundingFrustum = new BoundingFrustum(view * projection)
             }, id);
 
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent()
             {
                 HeightMap = heightMap,
-                Texture = texture2,
+                Texture = texture1,
                 Effect = shadow,
                 Width = 1081,
                 Height = 1081
@@ -180,17 +182,15 @@ namespace Assignment2
                 AmbientColor = Color.White.ToVector4(),
                 AmbientIntensity = 0.2f,
                 RenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
-                //shadowMapWidth
-                5,
-                //shadowMapHeight
-                7,
+                shadowMapWidth,
+                shadowMapHeight,
                 true,
                 SurfaceFormat.Single,
                 DepthFormat.Depth24),
                 FogColor = Color.CornflowerBlue.ToVector4(),
                 FogEnabled = true,
-                FogStart = 80f,
-                FogEnd = 200f
+                FogStart = 200f,
+                FogEnd = 1000f
             }, id);
 
             ComponentManager.Get.AddComponentsToEntity(new EffectSettingsComponent()
