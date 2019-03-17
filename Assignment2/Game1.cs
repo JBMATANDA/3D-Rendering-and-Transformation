@@ -31,9 +31,11 @@ namespace Assignment2
         
         private Matrix world;
         private Body humanoid;
-        private Texture2D texture;
+        private Texture2D texture2;
         private Model model1;
         private Effect effect;
+        private Effect shadow;
+        private Texture2D texture1;
         private PlayerCameraSystem playerCameraSystem;
         private List<Vector3> modelPositions;
         private List<Models> trees;
@@ -81,7 +83,9 @@ namespace Assignment2
             heightMap = Content.Load<Texture2D>("US_Canyon");
             bEffect = new BasicEffect(GraphicsDevice);
             effect = Content.Load<Effect>("effects");
-            texture = Content.Load<Texture2D>("quikscopeobama");
+            shadow = Content.Load<Effect>("shadow");
+            texture1 = Content.Load<Texture2D>("dorito");
+            texture2 = Content.Load<Texture2D>("mountaindew");
             model1 = Content.Load<Model>("tree01");
             model2 = Content.Load<Model>("tree02");
             model3 = Content.Load<Model>("tree03");
@@ -160,8 +164,8 @@ namespace Assignment2
             ComponentManager.Get.AddComponentsToEntity(new HeightMapComponent()
             {
                 HeightMap = heightMap,
-                Texture = texture,
-                Effect = effect,
+                Texture = texture2,
+                Effect = shadow,
                 Width = 1081,
                 Height = 1081
             }, id);
@@ -188,6 +192,11 @@ namespace Assignment2
                 FogStart = 80f,
                 FogEnd = 200f
             }, id);
+
+            ComponentManager.Get.AddComponentsToEntity(new EffectSettingsComponent()
+            {
+                Effect = shadow
+            }, id);
         }
 
         private void CreateRandomEntities()
@@ -211,7 +220,7 @@ namespace Assignment2
             {
                 int randomIndex = r.Next(modelArray.Length);
                 Model randomModel = modelArray[randomIndex];
-                var tree = new Models(randomModel, modelPositions[i], texture);
+                var tree = new Models(randomModel, modelPositions[i], texture2, graphics.GraphicsDevice);
                 trees.Add(tree);
             }
 

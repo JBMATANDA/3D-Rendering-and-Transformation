@@ -148,14 +148,18 @@ namespace _3D_Rendering_and_Transformation.Systems
 
 
             Matrix worldMatrix = Matrix.CreateTranslation(-heightMapComponent.Width / 2.0f, -0.5f*heightMapComponent.Height / 2.0f, 0f);
-            heightMapComponent.Effect.CurrentTechnique = heightMapComponent.Effect.Techniques["Textured"];
-            heightMapComponent.Effect.Parameters["xView"].SetValue(camera.View);
-            heightMapComponent.Effect.Parameters["xProjection"].SetValue(camera.Projection);
-            heightMapComponent.Effect.Parameters["xWorld"].SetValue(worldMatrix);
-            heightMapComponent.Effect.Parameters["xTexture"].SetValue(heightMapComponent.Texture);
-            heightMapComponent.Effect.Parameters["xLightDirection"].SetValue(new Vector3(0, 0, 0));
-            heightMapComponent.Effect.Parameters["xAmbient"].SetValue(1f);
+            heightMapComponent.Effect.CurrentTechnique = heightMapComponent.Effect.Techniques["DrawWithShadowMap"];
+            heightMapComponent.Effect.Parameters["View"].SetValue(camera.View);
+            heightMapComponent.Effect.Parameters["Projection"].SetValue(camera.Projection);
+            heightMapComponent.Effect.Parameters["World"].SetValue(worldMatrix);
+            heightMapComponent.Effect.Parameters["Texture"].SetValue(heightMapComponent.Texture);
+            heightMapComponent.Effect.Parameters["LightDirection"].SetValue(new Vector3(0, 0, 0));
+            heightMapComponent.Effect.Parameters["FogEnabled"].SetValue(true);
+            heightMapComponent.Effect.Parameters["FogStart"].SetValue(100f);
+            heightMapComponent.Effect.Parameters["FogEnd"].SetValue(1000f);
 
+            //heightMapComponent.Effect.Parameters["FogColor"].SetValue(new Vector3(50, 0, 50));
+            //heightMapComponent.Effect.Parameters["Ambient"].SetValue(1f);
 
             device.SetVertexBuffer(vertexBuffer);
             device.Indices = indexBuffer;

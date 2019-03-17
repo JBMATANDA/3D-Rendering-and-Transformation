@@ -28,7 +28,7 @@ float3 ViewVector = float3(1, 0, 0);
 ///FOG
 float FogStart = 40;
 float FogEnd = 100;
-float4 FogColor = float4(1, 0, 0, 1);
+float4 FogColor = float4(0, 1, 0, 1);
 bool FogEnabled = 1;
 float3 CameraPosition;
 
