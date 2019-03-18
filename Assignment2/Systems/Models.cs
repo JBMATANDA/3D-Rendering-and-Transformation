@@ -39,7 +39,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             var cameraComp = ComponentManager.Get.EntityComponent<CameraComponent>(0);
             lightComp = ComponentManager.Get.EntityComponent<LightSettingsComponent>(0);
 
-            boundingFrustum = new BoundingFrustum(cameraComp.View * cameraComp.Projection);
+            boundingFrustum = cameraComp.BoundingFrustum;
             this.texture = texture;
         }
         public void Update(GameTime gameTime)
@@ -109,7 +109,7 @@ namespace _3D_Rendering_and_Transformation.Systems
             graphicsDevice.Clear(Color.White);
             
             DrawModel("CreateShadowMap");
-            //graphicsDevice.SetRenderTarget(null);
+            graphicsDevice.SetRenderTarget(null);
         }
 
         void DrawWithShadowMap(LightSettingsComponent lightSettingsComponent)
@@ -142,12 +142,13 @@ namespace _3D_Rendering_and_Transformation.Systems
             {
                 foreach (var meshPart in mesh.MeshParts)
                 {
-                    //var world = transforms[mesh.ParentBone.Index] * modelComponent.ObjectWorld * worldMatrix;
-                    effectSettingsComponent.Apply(meshPart.Effect, texture, worldMatrix, techniqueName);
+                    var world = transforms[mesh.ParentBone.Index] * Matrix.Identity * worldMatrix;
+                    effectSettingsComponent.Apply(meshPart.Effect, texture, world, techniqueName);
 
-                    graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                     graphicsDevice.Indices = meshPart.IndexBuffer;
+                    graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                     graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, meshPart.VertexOffset, meshPart.StartIndex, meshPart.PrimitiveCount);
+                    
                 }
             }
         }
